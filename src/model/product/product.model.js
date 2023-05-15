@@ -17,14 +17,14 @@ const getProducts = async (id) => {
 };
 
 const addProduct = async (product) => {
-  const result = await ProductDb.findOneAndUpdate(
+  const res = await ProductDb.findOneAndUpdate(
     { name: product.name },
     { ...product },
     { upsert: true, new: true }
   ).populate("category");
   console.log(result);
 
-  return result;
+  return res;
 };
 
 const deleteProduct = async (productid) => {
