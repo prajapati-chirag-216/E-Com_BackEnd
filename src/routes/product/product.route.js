@@ -4,6 +4,7 @@ const express = require("express");
 const {
   httpGetProduct,
   httpGetAllProducts,
+  httpGetProductDetails,
   httpAddProduct,
   httpdeleteProduct,
   httpUpdateProduct,
@@ -12,6 +13,7 @@ const {
 const productRouter = express.Router();
 
 productRouter.get("/getproduct/:id", httpGetProduct);
+productRouter.get("/getproductDetails/:id", httpGetProductDetails);
 productRouter.get("/getproduct", httpGetAllProducts);
 productRouter.post("/addproduct", httpAddProduct);
 productRouter.delete("/deleteproduct/:id", httpdeleteProduct);

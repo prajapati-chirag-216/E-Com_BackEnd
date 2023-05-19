@@ -5,6 +5,7 @@ const path = require("path");
 const {
   addCategoryHandler,
   fetchCategoriesHandler,
+  fetchCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
 } = require("./categoryHandler");
@@ -19,6 +20,11 @@ function allowUnauthenticated(req, res, next) {
   }
 }
 
+categoryRouter.get(
+  "/fetchCategory/:id",
+  allowUnauthenticated,
+  fetchCategoryHandler
+);
 categoryRouter.get(
   "/fetchCategories",
   allowUnauthenticated,

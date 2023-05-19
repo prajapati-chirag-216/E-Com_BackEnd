@@ -6,12 +6,18 @@ const getProducts = async (id) => {
     result = await ProductDb.find({ category: id })
       .sort({ createdAt: 1 })
       .select({ __v: 0 });
-      console.log(result,'antim')
   } else {
     result = await ProductDb.find()
       .populate({ path: "category", select: "name _id" })
       .sort({ createdAt: 1 })
       .select({ __v: 0 });
+  }
+  return result;
+};
+const getProductDetails = async (id) => {
+  let result;
+  if (id) {
+    result = await ProductDb.findById(id);
   }
   return result;
 };
@@ -22,7 +28,6 @@ const addProduct = async (product) => {
     { ...product },
     { upsert: true, new: true }
   ).populate("category");
-  console.log(result);
 
   return result;
 };
@@ -41,12 +46,12 @@ const updateProduct = async (productData, productId) => {
     },
     { new: 1 }
   );
-  console.log(res, "inside updateback");
   return res;
 };
 
 module.exports = {
   getProducts,
+  getProductDetails,
   addProduct,
   deleteProduct,
   updateProduct,

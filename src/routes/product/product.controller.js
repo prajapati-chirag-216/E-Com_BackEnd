@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const {
   getProducts,
+  getProductDetails,
   addProduct,
   deleteProduct,
   updateProduct,
@@ -21,9 +22,18 @@ function uploadToImgur(image) {
 }
 
 const httpGetProduct = async (req, res) => {
-  console.log(req.params.id);
-  const id = req.params && req.params.id || undefined
+  const id = (req.params && req.params.id) || undefined;
   const result = await getProducts(id);
+  if (!result)
+    return res.status(400).json({
+      error: "Something Wrong In Products Data",
+    });
+
+  return res.status(200).json(result);
+};
+const httpGetProductDetails = async (req, res) => {
+  const id = (req.params && req.params.id) || undefined;
+  const result = await getProductDetails(id);
   if (!result)
     return res.status(400).json({
       error: "Something Wrong In Products Data",
@@ -43,8 +53,6 @@ const httpGetAllProducts = async (req, res) => {
 
 const httpAddProduct = async (req, res) => {
   const product = req.body;
-
-  console.log("inside productadd", product);
 
   const result = await addProduct(product);
 
@@ -75,8 +83,6 @@ const httpUpdateProduct = async (req, res) => {
   const productId = req.params.id;
   const productData = req.body;
 
-  console.log(productData, "finle data");
-
   const result = await updateProduct(productData, productId);
 
   if (!result) {
@@ -90,6 +96,7 @@ const httpUpdateProduct = async (req, res) => {
 
 module.exports = {
   httpGetProduct,
+  httpGetProductDetails,
   httpGetAllProducts,
   httpAddProduct,
   httpdeleteProduct,

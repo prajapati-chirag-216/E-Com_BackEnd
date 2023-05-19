@@ -21,6 +21,14 @@ const fetchCategoriesHandler = async (req, res) => {
     res.status(404).send(err || "somthing went Wrong!");
   }
 };
+const fetchCategoryHandler = async (req, res) => {
+  try {
+    const data = await Category.findById(req.params.id).select({ name: 1 });
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(404).send(err || "somthing went Wrong!");
+  }
+};
 
 const updateCategoryHandler = async (req, res) => {
   const catagoryId = req.params.id;
@@ -53,6 +61,7 @@ const deleteCategoryHandler = async (req, res) => {
 };
 module.exports = {
   fetchCategoriesHandler,
+  fetchCategoryHandler,
   addCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
