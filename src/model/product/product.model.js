@@ -1,4 +1,5 @@
 const ProductDb = require("../../model/product/product.mongo");
+const ReviewDb = require('../productReview/productReview.mongo')
 
 const getProducts = async (id) => {
   let result;
@@ -49,10 +50,52 @@ const updateProduct = async (productData, productId) => {
   return res;
 };
 
+
+const postReview = async(productId,reviewData) =>{
+
+
+     const reviewObj = { 
+       productId,
+       ...reviewData     
+     }
+
+
+     const data = new ReviewDb(reviewObj)
+     let result;
+
+     try{
+        result = await data.save();
+ 
+         console.log('inside model',result)
+
+     }catch(err){
+      throw err
+     }
+
+     return result;
+
+}
+
+const getReviews = async(id) =>{
+
+console.log(id)
+   try{
+    const data = await ReviewDb.find({productId:id}).select({__v:0,productId:0})
+   
+     return data
+   }catch(err){
+      throw err
+   }
+
+
+}
+
 module.exports = {
   getProducts,
   getProductDetails,
   addProduct,
   deleteProduct,
   updateProduct,
+  postReview,
+  getReviews
 };
