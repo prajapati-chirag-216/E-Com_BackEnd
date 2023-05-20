@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const displaySchema = mongoose.Schema({
-  image:
-   {
+  image: {
     type: String,
     required: true,
-  }
-,
+  },
+  text: String,
+  label: String,
 });
 
-const Product = mongoose.model("display", displaySchema);
+const Display = mongoose.model("display", displaySchema);
 
-module.exports = Product;
+module.exports = Display;

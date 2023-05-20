@@ -1,10 +1,9 @@
 const Display = require("../../model/displayImg/displaySchema");
 
 const addImageHandler = async (req, res) => {
-  const imageLink = Object.keys(req.body)[0];
-
   try {
-    const data = new Display({ image: imageLink });
+    const data = new Display(req.body);
+    console.log(data);
     await data.save();
     res.status(200).send({ success: true });
   } catch (err) {
@@ -14,14 +13,8 @@ const addImageHandler = async (req, res) => {
 
 const fetchImageHandler = async (req, res) => {
   try {
+    console.log("ran");
     const data = await Display.find();
-    // let images = [];
-    // data.map((img) => {
-    //   images.push({
-    //     img_data: Buffer.from(img.image, "binary").toString("base64"),
-    //     id: img._id,
-    //   });
-    // });
     res.status(200).send({
       data,
     });

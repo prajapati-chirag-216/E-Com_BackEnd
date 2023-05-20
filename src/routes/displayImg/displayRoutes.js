@@ -9,23 +9,23 @@ const {
 } = require("./displayHandler");
 const displayImgrouter = express.Router();
 
-// const storage = multer({
-//   limits: {
-//     fileSize: 5000000,
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + "-" + file.originalname);
-//   },
-// });
+function allowUnauthenticated(req, res, next) {
+  const { origin } = req.headers;
+  if (origin === "http://localhost:5000") {
+    return next();
+  } else {
+    auth(req, res, next);
+  }
+}
 
-displayImgrouter.post(
-  "/admin/addDisplayImage",
-  auth,
-  addImageHandler
+displayImgrouter.post("/admin/addDisplayImage", auth, addImageHandler);
+
+displayImgrouter.get(
+  "/admin/fetchDisplayImage",
+  allowUnauthenticated,
+  fetchImageHandler
 );
-
-displayImgrouter.post("/admin/fetchDisplayImage", auth, fetchImageHandler);
-displayImgrouter.post(
+displayImgrouter.delete(
   "/admin/deleteDisplayImage/:id",
   auth,
   deleteImageHandler
