@@ -8,20 +8,8 @@ const {
   deleteProduct,
   updateProduct,
   postReview,
-  getReviews
+  getReviews,
 } = require("../../model/product/product.model");
-
-function uploadToImgur(image) {
-  return new Promise((resolve, reject) => {
-    imgur.upload(image, function (err, res) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res.data.link);
-      }
-    });
-  });
-}
 
 const httpGetProduct = async (req, res) => {
   const id = (req.params && req.params.id) || undefined;
@@ -34,8 +22,9 @@ const httpGetProduct = async (req, res) => {
   return res.status(200).json(result);
 };
 const httpGetProductDetails = async (req, res) => {
-  const id = (req.params && req.params.id) || undefined;
+  const id = req.params.id;
   const result = await getProductDetails(id);
+
   if (!result)
     return res.status(400).json({
       error: "Something Wrong In Products Data",
@@ -96,37 +85,33 @@ const httpUpdateProduct = async (req, res) => {
   return res.status(200).json(result);
 };
 
-const httpPostReview = async(req,res) =>{
- 
+const httpPostReview = async (req, res) => {
   const productId = req.params.id;
-  const reviewData = req.body
-   
-  const result = await postReview(productId,reviewData)
+  const reviewData = req.body;
+  const result = await postReview(productId, reviewData);
 
-  if(!result){
+  if (!result) {
     return res.status(404).json({
       error: "Review Was Not Posted!",
     });
   }
 
-   return res.status(200).json(result)
-}
+  return res.status(200).json(result);
+};
 
-const httpGetProductReviews = async(req,res) =>{
+const httpGetProductReviews = async (req, res) => {
+  const productId = req.params.id;
 
-    const productId = req.params.id;
+  const result = await getReviews(productId);
 
-    const result = await getReviews(productId)
+  if (!result) {
+    return res.status(404).json({
+      error: "Review Was Found By Error!",
+    });
+  }
 
-    if(!result){
-      return res.status(404).json({
-        error: "Review Was Found By Error!",
-      });
-
-    }
-   
-    return res.status(200).json(result);
-}
+  return res.status(200).json(result);
+};
 
 module.exports = {
   httpGetProduct,
@@ -136,5 +121,5 @@ module.exports = {
   httpdeleteProduct,
   httpUpdateProduct,
   httpPostReview,
-  httpGetProductReviews
+  httpGetProductReviews,
 };

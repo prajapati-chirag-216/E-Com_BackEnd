@@ -3,7 +3,6 @@ const Display = require("../../model/displayImg/displaySchema");
 const addImageHandler = async (req, res) => {
   try {
     const data = new Display(req.body);
-    console.log(data);
     await data.save();
     res.status(200).send({ success: true });
   } catch (err) {
@@ -13,7 +12,6 @@ const addImageHandler = async (req, res) => {
 
 const fetchImageHandler = async (req, res) => {
   try {
-    console.log("ran");
     const data = await Display.find();
     res.status(200).send({
       data,

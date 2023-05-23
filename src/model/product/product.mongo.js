@@ -15,15 +15,11 @@ const ProductInfoSchema = new mongoose.Schema(
       required: true,
     },
     image: [
-    
-       {
-         
-         type: String,
-         require: true,
-       }
-
-    ]
-  ,
+      {
+        type: String,
+        require: true,
+      },
+    ],
     status: {
       type: String,
       require: true,
@@ -36,6 +32,12 @@ const ProductInfoSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+ProductInfoSchema.virtual("productReviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "productId",
+});
 
 const Product = mongoose.model("productInfo", ProductInfoSchema);
 module.exports = Product;

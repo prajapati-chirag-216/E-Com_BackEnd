@@ -1,10 +1,11 @@
 const ProductDb = require("../../model/product/product.mongo");
-const ReviewDb = require('../productReview/productReview.mongo')
+const ReviewDb = require("../productReview/productReview.mongo");
 
 const getProducts = async (id) => {
   let result;
   if (id) {
     result = await ProductDb.find({ category: id })
+
       .sort({ createdAt: 1 })
       .select({ __v: 0 });
   } else {
@@ -16,11 +17,16 @@ const getProducts = async (id) => {
   return result;
 };
 const getProductDetails = async (id) => {
-  let result;
-  if (id) {
-    result = await ProductDb.findById(id);
-  }
-  return result;
+  const result = await ProductDb.findById(id);
+  const reviews = await result.populate("productReviews");
+  const avgRatings =
+    reviews.productReviews.reduce((a, b) => a + b.rating, 0) /
+    reviews.productReviews.length;
+  return {
+    ...result._doc,
+    avgRatings,
+    reviewedBy: reviews.productReviews.length,
+  };
 };
 
 const addProduct = async (product) => {
@@ -50,45 +56,36 @@ const updateProduct = async (productData, productId) => {
   return res;
 };
 
+const postReview = async (productId, reviewData) => {
+  const reviewObj = {
+    productId,
+    ...reviewData,
+  };
 
-const postReview = async(productId,reviewData) =>{
+  const data = new ReviewDb(reviewObj);
+  let result;
 
+  try {
+    result = await data.save();
+  } catch (err) {
+    throw err;
+  }
 
-     const reviewObj = { 
-       productId,
-       ...reviewData     
-     }
+  return result;
+};
 
+const getReviews = async (id) => {
+  try {
+    const data = await ReviewDb.find({ productId: id }).select({
+      __v: 0,
+      productId: 0,
+    });
 
-     const data = new ReviewDb(reviewObj)
-     let result;
-
-     try{
-        result = await data.save();
- 
-         console.log('inside model',result)
-
-     }catch(err){
-      throw err
-     }
-
-     return result;
-
-}
-
-const getReviews = async(id) =>{
-
-console.log(id)
-   try{
-    const data = await ReviewDb.find({productId:id}).select({__v:0,productId:0})
-   
-     return data
-   }catch(err){
-      throw err
-   }
-
-
-}
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   getProducts,
@@ -97,5 +94,5 @@ module.exports = {
   deleteProduct,
   updateProduct,
   postReview,
-  getReviews
+  getReviews,
 };
