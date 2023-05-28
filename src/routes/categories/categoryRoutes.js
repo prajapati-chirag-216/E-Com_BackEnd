@@ -34,4 +34,6 @@ categoryRouter.post("/addCategory", auth, addCategoryHandler);
 categoryRouter.delete("/deleteCategory/:id", auth, deleteCategoryHandler);
 categoryRouter.patch("/updatecategory/:id", updateCategoryHandler);
 
+
+
 module.exports = categoryRouter;

@@ -9,6 +9,7 @@ const {
   updateProduct,
   postReview,
   getReviews,
+  getFilteredProducts
 } = require("../../model/product/product.model");
 
 const httpGetProduct = async (req, res) => {
@@ -113,6 +114,26 @@ const httpGetProductReviews = async (req, res) => {
   return res.status(200).json(result);
 };
 
+ const httpGetFilteredProducts = async(req,res) =>{
+
+const string = req.params.name
+const catId = req.params.id
+
+const result = await getFilteredProducts(catId,string);
+
+  if (!result) {
+    return res.status(404).json({
+      error: "Filtred Product Was Not Found!",
+    });
+  }
+
+  return res.status(200).json(result);
+
+
+}
+
+
+
 module.exports = {
   httpGetProduct,
   httpGetProductDetails,
@@ -122,4 +143,5 @@ module.exports = {
   httpUpdateProduct,
   httpPostReview,
   httpGetProductReviews,
+  httpGetFilteredProducts
 };

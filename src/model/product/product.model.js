@@ -19,6 +19,7 @@ const getProducts = async (id) => {
 const getProductDetails = async (id) => {
   const result = await ProductDb.findById(id);
   const reviews = await result.populate("productReviews");
+
   const avgRatings =
     reviews.productReviews.reduce((a, b) => a + b.rating, 0) /
     reviews.productReviews.length;
@@ -28,6 +29,60 @@ const getProductDetails = async (id) => {
     reviewedBy: reviews.productReviews.length,
   };
 };
+
+const getFilteredProducts = async(id,name) =>{
+
+  
+
+  let result;
+
+        if(name === 'sortByHighPrice'){
+           result = await ProductDb.find({category: id }).sort({price:-1})
+        }
+        else if(name === 'sortByLowPrice'){
+          result  = await ProductDb.find({category: id}).sort({price:1})
+        }
+        else if(name === 'sortByNewDate'){
+          result  = await ProductDb.find({category: id}).sort({createdAt:-1})
+        }
+        else if(name === 'sortByOldDate'){
+          result  = await ProductDb.find({category: id}).sort({createdAt:1})
+        }
+        else if(name === 'sortByPopularity'){
+
+          
+          const productsArr = await ProductDb.find({category:id});
+
+          const data = await Promise.all(productsArr.map(async(prodObj)=>{
+                      
+        
+
+                const reviews = await  prodObj.populate("productReviews")     
+          
+                const avgRatings =
+                reviews.productReviews.reduce((a, b) => a + b.rating, 0) /
+                reviews.productReviews.length;
+    
+
+                return {
+                  ...prodObj._doc,
+                  avgRatings: isNaN(avgRatings) ? 0 : avgRatings,
+                  reviewedBy: reviews.productReviews.length,
+                };
+
+
+
+          }))
+
+       
+
+
+        result =  data.sort((a,b) => b.avgRatings - a.avgRatings)
+
+        }
+
+    return result;
+}
 
 const addProduct = async (product) => {
   const res = await ProductDb.findOneAndUpdate(
@@ -87,6 +142,9 @@ const getReviews = async (id) => {
   }
 };
 
+
+
+
 module.exports = {
   getProducts,
   getProductDetails,
@@ -95,4 +153,5 @@ module.exports = {
   updateProduct,
   postReview,
   getReviews,
+  getFilteredProducts
 };
