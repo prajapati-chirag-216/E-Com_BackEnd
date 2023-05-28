@@ -7,7 +7,7 @@ const productRouter = require("./routes/product/product.route");
 const adminAuthrouter = require("./routes/adminAuth/adminRoutes");
 const displayImgrouter = require("./routes/displayImg/displayRoutes");
 const categoryRouter = require("./routes/categories/categoryRoutes");
-
+const userRouter = require("./routes/user/userRoutes");
 const app = express();
 app.use(
   cors({
@@ -26,5 +26,6 @@ app.use(productRouter);
 app.use(adminAuthrouter);
 app.use(displayImgrouter);
 app.use(categoryRouter);
+app.use(userRouter);
 
 module.exports = app;

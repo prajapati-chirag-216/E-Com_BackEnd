@@ -43,7 +43,7 @@ const updateCategoryHandler = async (req, res) => {
 
     return res.status(200).json(result);
   } catch (err) {
-    console.log(err.message);
+    res.status(404).send(err || "somthing went Wrong!");
   }
 };
 
