@@ -59,10 +59,16 @@ const deleteCategoryHandler = async (req, res) => {
     res.status(err.status || 404).send(err.message || err);
   }
 };
+
+
+
+
+
 module.exports = {
   fetchCategoriesHandler,
   fetchCategoryHandler,
   addCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
+
 };
