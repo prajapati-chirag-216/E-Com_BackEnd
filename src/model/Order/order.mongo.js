@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
             required:true
         },
         phoneNumber:{
-           type:Number,
+           type:String,
            required:true
         }
      },
@@ -47,11 +47,21 @@ const orderSchema = new mongoose.Schema(
          default:'Pending',
          required:true
      },
-     orderedItems:{
-        type:Array,
-        required:true
+     orderedItems:[
+         {
+          productId:{  
+            type:mongoose.Schema.Types.ObjectId,
+            required:true,
+            ref:'productInfo'
+          },
+          quntity:{
+            type:Number,
+             required:true
+          }
+        
+        }
 
-     },
+     ],
      totalPrice:{
         type:Number,
         required:true

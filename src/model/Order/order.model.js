@@ -1,5 +1,5 @@
 const OrderDb= require("../Order/order.mongo")
-
+const {getProductById} = require('../product/product.model')
 
 const postOrder = async(userData) =>{
 
@@ -25,18 +25,57 @@ const postOrder = async(userData) =>{
 const getAllOrders = async() =>{
 
 
-    let response;
+    let orders;
 
     try{
 
-        response = await OrderDb.find();
+        orders = await OrderDb.find();
+
+   
+
+   
+       orders =  await Promise.all(orders.map(async(order) =>{
+
+           
+            let orderedItems = order.orderedItems;
+            
+            
+            const products =  await Promise.all(orderedItems.map(async(item) => {
+                
+                let product = await getProductById(item.productId);
+
+              console.log(product)
+                
+                return {...product._doc,
+                    quntity:item.quntity}
+                
+            }))
+
+            
+            return {
+                ...order._doc,
+                orderedItems:products
+            }
+                   
+
+            
+         }
+         
+         
+         
+         ))
+
+           
+         
+        
+   
 
     }catch(err){
 
           throw err
     }
 
-     return response
+     return orders
        
 }
 
