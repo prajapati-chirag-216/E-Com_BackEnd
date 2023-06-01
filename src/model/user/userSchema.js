@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
     type: String,
     trim: true,
     minlength: [5, "Name should contain at least 5 characters .."],
+    required: true,
   },
   email: {
     type: String,
@@ -20,16 +21,19 @@ const userSchema = mongoose.Schema({
         throw new Error("Enter valid email ..");
       }
     },
+    required: true,
   },
   password: {
     type: String,
     trim: true,
     minlength: [6, "Enter valid password .."],
+    required: true,
   },
   phoneNo: {
     type: Number,
     trim: true,
     minlength: [10, "Enter valid Phone No .."],
+    required: true,
   },
   cartItems: [
     {

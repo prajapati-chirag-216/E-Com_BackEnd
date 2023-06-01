@@ -19,6 +19,14 @@ const signupUserHandler = async (req, res) => {
     res.status(err.status || 404).send(err);
   }
 };
+const fetchUserHandler = async (req, res) => {
+  try {
+    res.status(200).send({ userProfile: req.user });
+  } catch (err) {
+    console.log("err ", err);
+    res.status(err.status || 404).send(err);
+  }
+};
 const loginUserHandler = async (req, res) => {
   try {
     const data = await User.findbyCredentials(
@@ -112,6 +120,7 @@ const addCartItemsHandler = async (req, res) => {
 };
 module.exports = {
   signupUserHandler,
+  fetchUserHandler,
   loginUserHandler,
   logoutUserHandler,
   forgotPasswordHandler,

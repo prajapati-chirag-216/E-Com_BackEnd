@@ -20,4 +20,23 @@ const auth = async (req, res, next) => {
     res.status(err.status || 404).send(err);
   }
 };
-module.exports = auth;
+const verifyUser = async (req, res, next) => {
+  try {
+    const token = req.cookies["userToken"];
+    let data;
+    if (token) {
+      const decoded = jwt.verify(
+        token,
+        "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+      );
+      data = await User.findOne({
+        _id: decoded._id,
+      }).select({ name: 1 });
+    }
+    req.user = data;
+    next();
+  } catch (err) {
+    res.status(404).send({ message: "somthing went wrong" });
+  }
+};
+module.exports = { auth, verifyUser };
