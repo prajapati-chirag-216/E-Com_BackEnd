@@ -10,7 +10,8 @@ const {
   httpUpdateProduct,
   httpPostReview,
   httpGetProductReviews,
-  httpGetFilteredProducts
+  httpGetFilteredProducts,
+  httpCheckOutSession
 } = require("../../routes/product/product.controller");
 
 const productRouter = express.Router();
@@ -24,7 +25,7 @@ productRouter.patch("/updateproduct/:id", httpUpdateProduct);
 productRouter.post("/productreview/:id", httpPostReview);
 productRouter.get("/getproductReviews/:id", httpGetProductReviews);
 productRouter.get("/getfilteredproducts/:id/:name", httpGetFilteredProducts);
-
+productRouter.post('/create-checkout-session',httpCheckOutSession)
 
 
 

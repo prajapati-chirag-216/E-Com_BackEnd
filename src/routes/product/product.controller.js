@@ -11,6 +11,39 @@ const {
   getReviews,
   getFilteredProducts
 } = require("../../model/product/product.model");
+const Stripe = require('stripe')
+
+const stripe = Stripe('sk_test_51NCky5SI3nqJvQTjKZKdOjnx2DZZC3RdatMm7TvgY9dvjhHUaaRd0ij0OrE9ZMoJ618MmuY4aZDnS9XMKnxCo1Ds00EHF3Y8Kk')
+
+const httpCheckOutSession = async(req,res) =>{
+
+  
+
+const session = await stripe.checkout.sessions.create({
+  payment_method_types: ['card'],
+  line_items: [{
+
+     price_data:{
+        currency:"usd",
+        product_data:{
+          name:'T-Shirt'
+        },
+        unit_amount:2000
+     },
+     quantity:1
+    
+    // price: 'price_1ND0RaSI3nqJvQTjkDlw4buB',
+    // quantity: 1,
+  }],
+  mode: 'payment',
+  success_url: 'http://localhost:5000',
+  cancel_url: 'http://localhost:5000',
+});
+
+    console.log(session)
+res.send({url: session.url});
+
+}
 
 const httpGetProduct = async (req, res) => {
   const id = (req.params && req.params.id) || undefined;
@@ -143,5 +176,6 @@ module.exports = {
   httpUpdateProduct,
   httpPostReview,
   httpGetProductReviews,
-  httpGetFilteredProducts
+  httpGetFilteredProducts,
+  httpCheckOutSession
 };
