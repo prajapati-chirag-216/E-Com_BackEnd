@@ -16,15 +16,6 @@ const getProducts = async (id) => {
   }
   return result;
 };
-
-const getProductById = async(id) =>{
-
-     const result = await ProductDb.findById({_id:id})
-
-     return result
-}
-
-
 const getProductDetails = async (id) => {
   const result = await ProductDb.findById(id);
   const reviews = await result.populate("productReviews");
@@ -135,7 +126,6 @@ const getReviews = async (id) => {
 
 module.exports = {
   getProducts,
-  getProductById,
   getProductDetails,
   addProduct,
   deleteProduct,
