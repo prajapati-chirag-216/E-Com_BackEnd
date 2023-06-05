@@ -1,6 +1,3 @@
-const path = require("path");
-
-const fs = require("fs");
 const {
   getProducts,
   getProductDetails,
@@ -138,5 +135,4 @@ module.exports = {
   httpPostReview,
   httpGetProductReviews,
   httpGetFilteredProducts,
-  httpCheckOutSession,
 };

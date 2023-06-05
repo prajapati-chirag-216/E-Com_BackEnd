@@ -95,6 +95,5 @@ module.exports = {
   httpOrderStatus,
   httpGetOrderById,
   httpDeleteOrder,
-  httpDeleteOrder,
   httpsGetTodaysOrders,
 };

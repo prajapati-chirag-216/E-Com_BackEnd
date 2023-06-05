@@ -14,13 +14,15 @@ const refreshTokenCookieOptions = {
 
 const signupUserHandler = async (req, res) => {
   try {
-    const data = await new User({ ...req.body, phoneNo: +req.body.phoneNo });
+    const data = await new User({ ...req.body, phoneNo: req.body.phoneNo });
     const { accessToken, refreshToken } = data.getAuthToken();
+    console.log(data);
     await data.save();
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     res.status(200).send({ success: true });
   } catch (err) {
+    console.log(err);
     res
       .status(err.status || (err.code === 11000 ? 409 : 400))
       .send(
@@ -159,5 +161,6 @@ module.exports = {
   forgotPasswordHandler,
   resetPasswordHandler,
   addCartItemsHandler,
-  getAccessToken,,
+  getAccessToken,
+  getAllUsers,
 };
