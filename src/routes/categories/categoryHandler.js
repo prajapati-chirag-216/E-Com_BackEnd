@@ -10,7 +10,7 @@ const addCategoryHandler = async (req, res) => {
     await data.save();
     res.status(200).send({ success: true });
   } catch (err) {
-    res.status(404).send(err || "somthing went Wrong!");
+    res.status(err.status || 404).send(err || "somthing went Wrong!");
   }
 };
 const fetchCategoriesHandler = async (req, res) => {
@@ -18,15 +18,16 @@ const fetchCategoriesHandler = async (req, res) => {
     const data = await Category.find();
     res.status(200).send(data);
   } catch (err) {
-    res.status(404).send(err || "somthing went Wrong!");
+    res.status(err.status || 404).send(err || "somthing went Wrong!");
   }
 };
 const fetchCategoryHandler = async (req, res) => {
   try {
     const data = await Category.findById(req.params.id).select({ name: 1 });
     res.status(200).send(data);
+    // res.status(401).send({ message: "curruntly unavailable" });
   } catch (err) {
-    res.status(404).send(err || "somthing went Wrong!");
+    res.status(err.status || 404).send(err.message || "somthing went Wrong!");
   }
 };
 
@@ -43,7 +44,7 @@ const updateCategoryHandler = async (req, res) => {
 
     return res.status(200).json(result);
   } catch (err) {
-    res.status(404).send(err || "somthing went Wrong!");
+    res.status(err.status || 404).send(err || "somthing went Wrong!");
   }
 };
 
@@ -60,15 +61,10 @@ const deleteCategoryHandler = async (req, res) => {
   }
 };
 
-
-
-
-
 module.exports = {
   fetchCategoriesHandler,
   fetchCategoryHandler,
   addCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
-
 };

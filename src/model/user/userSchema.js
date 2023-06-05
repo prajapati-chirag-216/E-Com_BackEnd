@@ -3,6 +3,7 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const status = require("http-status");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -73,14 +74,32 @@ userSchema.methods.createResetToken = function () {
 
 userSchema.methods.getAuthToken = function () {
   const user = this;
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     { _id: user._id.toString() },
     "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610",
     {
-      expiresIn: "2d", // expires in 2 days
+      expiresIn: "6m", // in case it takes some seconds delay
     }
   );
-  return token;
+  const refreshToken = jwt.sign(
+    { _id: user._id.toString() },
+    "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8",
+    {
+      expiresIn: "2d", // in case it takes some seconds delay
+    }
+  );
+  return { accessToken, refreshToken };
+};
+userSchema.methods.getAccessToken = function () {
+  const user = this;
+  const accessToken = jwt.sign(
+    { _id: user._id },
+    "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610",
+    {
+      expiresIn: "6m", // in case it first expires
+    }
+  );
+  return accessToken;
 };
 
 userSchema.statics.findbyCredentials = async function (email, password) {
@@ -89,17 +108,21 @@ userSchema.statics.findbyCredentials = async function (email, password) {
     .select({ password: 1, cartItems: 1 });
   if (user == null) {
     throw {
-      message: "Invalide Login details!",
-      status: 502,
-      validityStatus: "email",
+      status: status.UNAUTHORIZED,
+      message: {
+        text: "Invalide Login details!",
+        validityStatus: "email",
+      },
     };
   }
   const compare = await bcrypt.compare(password, user.password);
   if (!compare) {
     throw {
-      message: "Invalide Password !",
-      status: 502,
-      validityStatus: "password",
+      status: status.UNAUTHORIZED,
+      message: {
+        text: "Invalide Password !",
+        validityStatus: "password",
+      },
     };
   }
   return user;

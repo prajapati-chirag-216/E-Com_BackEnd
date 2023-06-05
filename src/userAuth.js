@@ -1,42 +1,142 @@
 const jwt = require("jsonwebtoken");
 const User = require("./model/user/userSchema");
-
+const status = require("http-status");
 const auth = async (req, res, next) => {
   try {
-    const token = req.cookies["userToken"];
-    const decoded = jwt.verify(
-      token,
-      "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
-    );
-    const data = await User.findOne({
-      _id: decoded._id,
-    });
-    if (!data || data.length === 0) {
-      throw { message: "User is not LogedIn!" };
+    const accessToken = req.cookies["accessToken"];
+    const refreshToken = req.cookies["refreshToken"];
+    let data;
+    if (refreshToken) {
+      let accessTokenDecoded;
+      if (accessToken) {
+        accessTokenDecoded = jwt.verify(
+          accessToken,
+          "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+        );
+      }
+      const refreshTokenDecoded = jwt.verify(
+        refreshToken,
+        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
+      );
+      if (
+        accessTokenDecoded &&
+        refreshTokenDecoded &&
+        accessTokenDecoded._id === refreshTokenDecoded._id
+      ) {
+        data = await User.findOne({
+          _id: accessTokenDecoded._id,
+        });
+        req.user = data;
+      } else if (refreshTokenDecoded) {
+        throw {
+          status: status.FORBIDDEN,
+          message: {
+            text: "invalid access",
+            refreshTokenDecoded: true,
+          },
+        };
+      }
+    } else {
+      throw {
+        status: status.UNAUTHORIZED,
+        message: {
+          text: "unAuthorized access",
+        },
+      };
     }
-    req.user = data;
     next();
   } catch (err) {
-    res.status(err.status || 404).send(err);
+    res.status(err.status || 404).send(err.message || "somthing went wrong!");
   }
 };
 const verifyUser = async (req, res, next) => {
   try {
-    const token = req.cookies["userToken"];
+    const accessToken = req.cookies["accessToken"];
+    const refreshToken = req.cookies["refreshToken"];
     let data;
-    if (token) {
-      const decoded = jwt.verify(
-        token,
-        "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+    if (refreshToken) {
+      let accessTokenDecoded;
+      if (accessToken) {
+        accessTokenDecoded = jwt.verify(
+          accessToken,
+          "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+        );
+      }
+      const refreshTokenDecoded = jwt.verify(
+        refreshToken,
+        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
       );
-      data = await User.findOne({
-        _id: decoded._id,
-      }).select({ name: 1 });
+      if (
+        accessTokenDecoded &&
+        refreshTokenDecoded &&
+        accessTokenDecoded._id === refreshTokenDecoded._id
+      ) {
+        data = await User.findOne({
+          _id: accessTokenDecoded._id,
+        }).select({ name: 1 });
+        req.user = data;
+      } else if (refreshTokenDecoded) {
+        throw {
+          status: status.FORBIDDEN,
+          message: {
+            text: "invalid access",
+            refreshTokenDecoded: true,
+          },
+        };
+      }
+    } else {
+      req.user = data;
     }
-    req.user = data;
     next();
   } catch (err) {
-    res.status(404).send({ message: "somthing went wrong" });
+    res.status(err.status || 404).send(err.message || "somthing went wrong");
   }
 };
-module.exports = { auth, verifyUser };
+const verifyRefreshToken = async (req, res, next) => {
+  try {
+    const refreshToken = req.cookies["refreshToken"];
+    let data;
+    if (refreshToken) {
+      const refreshTokenDecoded = jwt.verify(
+        refreshToken,
+        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
+      );
+      if (refreshTokenDecoded) {
+        data = await User.findOne({
+          _id: refreshTokenDecoded._id,
+        }).select({ name: 1 });
+        req.user = data;
+      }
+    } else {
+      throw {
+        status: status.FORBIDDEN,
+        message: {
+          text: "anAuthorized access",
+        },
+      };
+    }
+    next();
+  } catch (err) {
+    res.status(err.status || 404).send(err.message || "Somthing Went Wrong!");
+  }
+};
+// const verifyUser = async (req, res, next) => {
+//   try {
+//     const accessToken = req.cookies["accessToken"];
+//     let data;
+//     if (accessToken) {
+//       const decoded = jwt.verify(
+//         accessToken,
+//         "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+//       );
+//       data = await User.findOne({
+//         _id: decoded._id,
+//       }).select({ name: 1 });
+//     }
+//     req.user = data;
+//     next();
+//   } catch (err) {
+//     res.status(404).send({ message: "somthing went wrong" });
+//   }
+// };
+module.exports = { auth, verifyUser, verifyRefreshToken };

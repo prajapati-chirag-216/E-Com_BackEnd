@@ -8,7 +8,7 @@ const adminAuthrouter = require("./routes/adminAuth/adminRoutes");
 const displayImgrouter = require("./routes/displayImg/displayRoutes");
 const categoryRouter = require("./routes/categories/categoryRoutes");
 const userRouter = require("./routes/user/userRoutes");
-const orderRouter = require('./routes/Order/order.routes')
+const orderRouter = require("./routes/Order/order.routes");
 const app = express();
 app.use(
   cors({
@@ -28,6 +28,10 @@ app.use(adminAuthrouter);
 app.use(displayImgrouter);
 app.use(categoryRouter);
 app.use(userRouter);
-app.use(orderRouter)
+app.use(orderRouter);
+app.use((req, res, next) => {
+  res.status(404).send("Page Not Found.");
+  next();
+});
 
 module.exports = app;

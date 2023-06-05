@@ -1,5 +1,5 @@
 const express = require("express");
-const { auth, verifyUser } = require("../../userAuth");
+const { auth, verifyUser, verifyRefreshToken } = require("../../userAuth");
 const {
   signupUserHandler,
   loginUserHandler,
@@ -8,6 +8,7 @@ const {
   resetPasswordHandler,
   addCartItemsHandler,
   fetchUserHandler,
+  getAccessToken,
 } = require("./userHandler");
 const userrouter = express.Router();
 userrouter.get("/user/profile", verifyUser, fetchUserHandler);
@@ -17,4 +18,5 @@ userrouter.post("/user/logout", auth, logoutUserHandler);
 userrouter.post("/user/forgotPassword", forgotPasswordHandler);
 userrouter.post("/user/resetPassword/:id", resetPasswordHandler);
 userrouter.post("/addCartItems", auth, addCartItemsHandler);
+userrouter.get("/user/getAccessToken", verifyRefreshToken, getAccessToken);
 module.exports = userrouter;
