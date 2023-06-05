@@ -9,7 +9,7 @@ const {
   updateProduct,
   postReview,
   getReviews,
-  getFilteredProducts
+  getFilteredProducts,
 } = require("../../model/product/product.model");
 
 const httpGetProduct = async (req, res) => {
@@ -114,12 +114,11 @@ const httpGetProductReviews = async (req, res) => {
   return res.status(200).json(result);
 };
 
- const httpGetFilteredProducts = async(req,res) =>{
+const httpGetFilteredProducts = async (req, res) => {
+  const string = req.params.name;
+  const catId = req.params.id;
 
-const string = req.params.name
-const catId = req.params.id
-
-const result = await getFilteredProducts(catId,string);
+  const result = await getFilteredProducts(catId, string);
 
   if (!result) {
     return res.status(404).json({
@@ -128,11 +127,7 @@ const result = await getFilteredProducts(catId,string);
   }
 
   return res.status(200).json(result);
-
-
-}
-
-
+};
 
 module.exports = {
   httpGetProduct,
@@ -143,5 +138,6 @@ module.exports = {
   httpUpdateProduct,
   httpPostReview,
   httpGetProductReviews,
-  httpGetFilteredProducts
+  httpGetFilteredProducts,
+  httpCheckOutSession,
 };

@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   phoneNo: {
-    type: String,
+    type: Number,
     trim: true,
     minlength: [10, "Enter valid Phone No .."],
     required: true,
@@ -49,9 +49,7 @@ const userSchema = mongoose.Schema({
   ],
   passwordResetToken: String,
   passwordResetExpires: Date,
-},
-{timestamps:true}
-);
+});
 
 userSchema.methods.toJSON = function () {
   const user = this.toObject(); // this will return a clone object so we can delete from that
