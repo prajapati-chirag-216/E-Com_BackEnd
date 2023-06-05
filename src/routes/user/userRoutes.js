@@ -1,6 +1,5 @@
 const express = require("express");
-const { auth, verifyUser } = require("../../userAuth");
-const { auth, verifyUser } = require("../../userAuth");
+const { auth, verifyUser, verifyRefreshToken } = require("../../userAuth");
 const {
   signupUserHandler,
   loginUserHandler,
@@ -9,6 +8,7 @@ const {
   resetPasswordHandler,
   addCartItemsHandler,
   fetchUserHandler,
+  getAccessToken,
   getAllUsers,
 } = require("./userHandler");
 const userrouter = express.Router();
@@ -20,4 +20,5 @@ userrouter.post("/user/forgotPassword", forgotPasswordHandler);
 userrouter.post("/user/resetPassword/:id", resetPasswordHandler);
 userrouter.post("/addCartItems", auth, addCartItemsHandler);
 userrouter.get("/getAllUsers", getAllUsers);
+userrouter.get("/user/getAccessToken", verifyRefreshToken, getAccessToken);
 module.exports = userrouter;

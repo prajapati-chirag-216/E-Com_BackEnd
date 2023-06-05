@@ -1,31 +1,31 @@
 const User = require("../../model/user/userSchema");
 const crypto = require("crypto");
+const status = require("http-status");
 const { sendResetPasswordEmail } = require("../../utils/email");
-const cookieOptions = {
+
+const accessTokenCookieOptions = {
+  expires: new Date(Date.now() + 1000 * 60 * 5),
+  httpOnly: false,
+};
+const refreshTokenCookieOptions = {
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
   httpOnly: true,
 };
+
 const signupUserHandler = async (req, res) => {
   try {
     const data = await new User({ ...req.body, phoneNo: +req.body.phoneNo });
-    if (!data || data.length === 0) {
-      throw { message: "Session Time out! Please try again.", status: 502 };
-    }
-    const token = data.getAuthToken();
+    const { accessToken, refreshToken } = data.getAuthToken();
     await data.save();
-    res.cookie("userToken", token, cookieOptions);
+    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     res.status(200).send({ success: true });
   } catch (err) {
-    res.status(err.status || 404).send(err);
-  }
-};
-
-const fetchUserHandler = async (req, res) => {
-  try {
-    res.status(200).send({ userProfile: req.user });
-  } catch (err) {
-    console.log("err ", err);
-    res.status(err.status || 404).send(err);
+    res
+      .status(err.status || (err.code === 11000 ? 409 : 400))
+      .send(
+        err.code === 11000 ? { text: "e-mail is already registered" } : err
+      );
   }
 };
 const loginUserHandler = async (req, res) => {
@@ -34,23 +34,26 @@ const loginUserHandler = async (req, res) => {
       req.body.email,
       req.body.password
     );
-    const token = await data.getAuthToken();
-    res.cookie("userToken", token, cookieOptions);
+    const { accessToken, refreshToken } = await data.getAuthToken();
+    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     res.status(200).send({
       success: true,
       cartItems: data.cartItems,
     });
   } catch (err) {
-    res.status(err.status || 404).send(err);
+    console.log(err);
+    res.status(err.status || 400).send(err.message || "somthing went Wrong");
   }
 };
 
 const logoutUserHandler = (req, res) => {
   try {
-    res.clearCookie("userToken");
+    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
     res.status(200).send({ success: true });
   } catch (err) {
-    res.status(404).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
@@ -68,7 +71,7 @@ const forgotPasswordHandler = async (req, res) => {
     );
     res.status(200).send({ success: true, resettoken });
   } catch (err) {
-    res.status(err.status || 404).send(err);
+    res.status(err.status || status[400]).send(err);
   }
 };
 
@@ -92,7 +95,14 @@ const resetPasswordHandler = async (req, res) => {
 
     return res.status(200).send({ status: true });
   } catch (err) {
-    res.status(err.status || 404).send(err);
+    res.status(err.status || status[400]).send(err);
+  }
+};
+const fetchUserHandler = async (req, res) => {
+  try {
+    res.status(200).send({ userProfile: req.user });
+  } catch (err) {
+    res.status(err.status || status[400]).send(err);
   }
 };
 const addCartItemsHandler = async (req, res) => {
@@ -116,7 +126,7 @@ const addCartItemsHandler = async (req, res) => {
     await data.save();
     await res.status(200).send({ success: true, cartItems });
   } catch (err) {
-    res.status(err.status || 404).send(err);
+    res.status(err.status || status[400]).send(err);
   }
 };
 
@@ -130,6 +140,17 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getAccessToken = async (req, res) => {
+  try {
+    const accessToken = await req.user.getAccessToken();
+    res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+    res.status(200).send({
+      success: true,
+    });
+  } catch (err) {
+    res.status(err.status || status[400]).send(err);
+  }
+};
 module.exports = {
   signupUserHandler,
   fetchUserHandler,
@@ -138,5 +159,5 @@ module.exports = {
   forgotPasswordHandler,
   resetPasswordHandler,
   addCartItemsHandler,
-  getAllUsers,
+  getAccessToken,,
 };

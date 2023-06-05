@@ -16,6 +16,13 @@ const getProducts = async (id) => {
   }
   return result;
 };
+
+const getProductById = async (id) => {
+  const result = await ProductDb.findById({ _id: id });
+
+  return result;
+};
+
 const getProductDetails = async (id) => {
   const result = await ProductDb.findById(id);
   const reviews = await result.populate("productReviews");
@@ -98,17 +105,13 @@ const postReview = async (productId, reviewData) => {
     productId,
     ...reviewData,
   };
-
-  const data = new ReviewDb(reviewObj);
-  let result;
-
   try {
-    result = await data.save();
+    const data = new ReviewDb(reviewObj);
+    await data.save();
+    return data;
   } catch (err) {
     throw err;
   }
-
-  return result;
 };
 
 const getReviews = async (id) => {

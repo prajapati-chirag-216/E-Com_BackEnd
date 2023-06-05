@@ -96,8 +96,7 @@ const httpPostReview = async (req, res) => {
       error: "Review Was Not Posted!",
     });
   }
-
-  return res.status(200).json(result);
+  res.status(200).json(result);
 };
 
 const httpGetProductReviews = async (req, res) => {
