@@ -1,4 +1,4 @@
-const { postOrder,getAllOrders,updateOrderStatus } =  require( "../../model/Order/order.model");
+const { postOrder,getAllOrders,updateOrderStatus,getOrderById,deleteOrder,getTodaysOrders} =  require( "../../model/Order/order.model");
 
 
 const httpPostOrder = async(req,res) =>{
@@ -42,7 +42,7 @@ const httpGetAllOrders = async(req,res) =>{
 
       const status = req.body;
 
-      console.log(status)
+     
       const OrderId = req.params.id
 
       const result = await updateOrderStatus(status,OrderId);
@@ -58,10 +58,65 @@ const httpGetAllOrders = async(req,res) =>{
       
   }
 
+
+
+ const  httpGetOrderById = async(req,res)  =>{
+
+
+       const orderId = req.params.id;
+
+       const result = await getOrderById(orderId);
+
+
+       if (!result) {
+        return res.status(400).json({
+          error: "Your Order  was Not Found!",
+        });
+      }
+
+      return res.status(200).json(result)
+        
+ }
+
+
+ const httpDeleteOrder = async(req,res) =>{
+
+     const id = req.params.id;
+
+      const result = await deleteOrder(id);
+
+      if (!result) {
+        return res.status(400).json({
+          error: "Your Order  was Deleted!",
+        });
+      }
+
+      return res.status(200).json(result)
+
+ }
+
+ const httpsGetTodaysOrders = async(req,res) =>{
+
+       const result = await getTodaysOrders();
+
+       if (!result) {
+        return res.status(400).json({
+          error: "Your Order  was Not Found!",
+        });
+      }
+
+      return res.status(200).json(result)
+
+ }
+
 module.exports =    {
     
     httpPostOrder,
     httpGetAllOrders,
-    httpOrderStatus
+    httpOrderStatus,
+    httpGetOrderById,
+    httpDeleteOrder,
+    httpDeleteOrder,
+    httpsGetTodaysOrders
 }
      

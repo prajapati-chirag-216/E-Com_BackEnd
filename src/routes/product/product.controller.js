@@ -138,5 +138,4 @@ module.exports = {
   httpPostReview,
   httpGetProductReviews,
   httpGetFilteredProducts,
-  httpCheckOutSession,
 };

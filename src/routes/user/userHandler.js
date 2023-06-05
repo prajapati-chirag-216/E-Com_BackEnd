@@ -118,6 +118,21 @@ const addCartItemsHandler = async (req, res) => {
     res.status(err.status || 404).send(err);
   }
 };
+
+const getAllUsers = async(req,res) =>{
+
+
+         try{
+           const result = await User.find();
+
+            return res.status(200).json(result)
+         }catch(err){
+
+             throw err
+         }
+}
+
+
 module.exports = {
   signupUserHandler,
   fetchUserHandler,
@@ -126,4 +141,5 @@ module.exports = {
   forgotPasswordHandler,
   resetPasswordHandler,
   addCartItemsHandler,
+  getAllUsers
 };

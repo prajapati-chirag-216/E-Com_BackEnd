@@ -44,7 +44,7 @@ const getAllOrders = async() =>{
                 
                 let product = await getProductById(item.productId);
 
-              console.log(product)
+            
                 
                 return {...product._doc,
                     quntity:item.quntity}
@@ -81,16 +81,15 @@ const getAllOrders = async() =>{
 
  const updateOrderStatus = async(status,OrderId) =>{
 
-console.log(1)
+
     let response;
 
     try{
 
-        response = await OrderDb.findByIdAndUpdate({_id:OrderId},{
-            deliveryStatus:status
-        },{new:true})
+        response = await OrderDb.findByIdAndUpdate({_id:OrderId},status
+        ,{new:true})
 
-        console.log(response)
+      
     }catch(err){
         throw err
     }
@@ -98,9 +97,109 @@ console.log(1)
      return response
  }
 
+
+ const getOrderById = async(orderId) =>{
+
+      let response;
+
+      try{
+         response = await OrderDb.findById({_id:orderId})
+
+         
+      }catch(err){
+         
+        throw err
+      }
+
+      return response?[response]:[]
+ }
+
+ const deleteOrder = async(orderId) =>{
+     
+     
+     let response;
+
+      try{
+         
+         response = await OrderDb.findByIdAndDelete({_id:orderId})
+      }catch(err){
+         
+        throw err
+      }
+
+      return response;
+ }
+
+ const getTodaysOrders = async() =>{
+
+         
+     let response;
+
+     const currentDate = new Date();
+
+      const startOfDay = new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate());
+      const endOfDay = new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()+1);
+
+
+     try{
+
+        response = await OrderDb.find({
+            createdAt:{
+               
+                $gte:startOfDay,
+                $lt:endOfDay
+            }
+        })
+
+
+
+        response =  await Promise.all(response.map(async(order) =>{
+
+           
+            let orderedItems = order.orderedItems;
+            
+            
+            const products =  await Promise.all(orderedItems.map(async(item) => {
+                
+                let product = await getProductById(item.productId);
+
+            
+                
+                return {...product._doc,
+                    quntity:item.quntity}
+                
+            }))
+
+            
+            return {
+                ...order._doc,
+                orderedItems:products
+            }
+                   
+
+            
+         }
+         
+         
+         
+         ))
+
+     }catch(err){
+         
+        throw err
+      }
+
+      
+
+      return response;
+ }
+
 module.exports = {
   
 postOrder,
 getAllOrders,
-updateOrderStatus
+updateOrderStatus,
+getOrderById,
+deleteOrder,
+getTodaysOrders
 }
