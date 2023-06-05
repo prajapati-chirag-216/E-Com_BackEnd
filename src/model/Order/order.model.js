@@ -1,205 +1,143 @@
-const OrderDb= require("../Order/order.mongo")
-const {getProductById} = require('../product/product.model')
+const OrderDb = require("../Order/order.mongo");
+const { getProductById } = require("../product/product.model");
 
-const postOrder = async(userData) =>{
+const postOrder = async (userData) => {
+  const data = await new OrderDb(userData);
 
+  let result;
 
-    const data = await new OrderDb(userData)
+  try {
+    result = await data.save();
+  } catch (err) {
+    throw err;
+  }
 
-    let result;
+  return result;
+};
 
-    try{
+const getAllOrders = async () => {
+  let orders;
 
-        result = await data.save();
+  try {
+    orders = await OrderDb.find();
 
-    }catch(err)
-    {
-        throw err
-    }
+    orders = await Promise.all(
+      orders.map(async (order) => {
+        let orderedItems = order.orderedItems;
 
-  return result
-     
-}
+        const products = await Promise.all(
+          orderedItems.map(async (item) => {
+            let product = await getProductById(item.productId);
 
+            return { ...product._doc, quntity: item.quntity };
+          })
+        );
 
-const getAllOrders = async() =>{
+        return {
+          ...order._doc,
+          orderedItems: products,
+        };
+      })
+    );
+  } catch (err) {
+    throw err;
+  }
 
+  return orders;
+};
 
-    let orders;
+const updateOrderStatus = async (status, OrderId) => {
+  let response;
 
-    try{
+  try {
+    response = await OrderDb.findByIdAndUpdate({ _id: OrderId }, status, {
+      new: true,
+    });
+  } catch (err) {
+    throw err;
+  }
 
-        orders = await OrderDb.find();
+  return response;
+};
 
-   
+const getOrderById = async (orderId) => {
+  let response;
 
-   
-       orders =  await Promise.all(orders.map(async(order) =>{
+  try {
+    response = await OrderDb.findById({ _id: orderId });
+  } catch (err) {
+    throw err;
+  }
 
-           
-            let orderedItems = order.orderedItems;
-            
-            
-            const products =  await Promise.all(orderedItems.map(async(item) => {
-                
-                let product = await getProductById(item.productId);
+  return response ? [response] : [];
+};
 
-            
-                
-                return {...product._doc,
-                    quntity:item.quntity}
-                
-            }))
+const deleteOrder = async (orderId) => {
+  let response;
 
-            
-            return {
-                ...order._doc,
-                orderedItems:products
-            }
-                   
+  try {
+    response = await OrderDb.findByIdAndDelete({ _id: orderId });
+  } catch (err) {
+    throw err;
+  }
 
-            
-         }
-         
-         
-         
-         ))
+  return response;
+};
 
-           
-         
-        
-   
+const getTodaysOrders = async () => {
+  let response;
 
-    }catch(err){
+  const currentDate = new Date();
 
-          throw err
-    }
+  const startOfDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endOfDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + 1
+  );
 
-     return orders
-       
-}
+  try {
+    response = await OrderDb.find({
+      createdAt: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
 
- const updateOrderStatus = async(status,OrderId) =>{
+    response = await Promise.all(
+      response.map(async (order) => {
+        let orderedItems = order.orderedItems;
 
+        const products = await Promise.all(
+          orderedItems.map(async (item) => {
+            let product = await getProductById(item.productId);
 
-    let response;
+            return { ...product._doc, quntity: item.quntity };
+          })
+        );
 
-    try{
+        return {
+          ...order._doc,
+          orderedItems: products,
+        };
+      })
+    );
+  } catch (err) {
+    throw err;
+  }
 
-        response = await OrderDb.findByIdAndUpdate({_id:OrderId},status
-        ,{new:true})
-
-      
-    }catch(err){
-        throw err
-    }
-
-     return response
- }
-
-
- const getOrderById = async(orderId) =>{
-
-      let response;
-
-      try{
-         response = await OrderDb.findById({_id:orderId})
-
-         
-      }catch(err){
-         
-        throw err
-      }
-
-      return response?[response]:[]
- }
-
- const deleteOrder = async(orderId) =>{
-     
-     
-     let response;
-
-      try{
-         
-         response = await OrderDb.findByIdAndDelete({_id:orderId})
-      }catch(err){
-         
-        throw err
-      }
-
-      return response;
- }
-
- const getTodaysOrders = async() =>{
-
-         
-     let response;
-
-     const currentDate = new Date();
-
-      const startOfDay = new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate());
-      const endOfDay = new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()+1);
-
-
-     try{
-
-        response = await OrderDb.find({
-            createdAt:{
-               
-                $gte:startOfDay,
-                $lt:endOfDay
-            }
-        })
-
-
-
-        response =  await Promise.all(response.map(async(order) =>{
-
-           
-            let orderedItems = order.orderedItems;
-            
-            
-            const products =  await Promise.all(orderedItems.map(async(item) => {
-                
-                let product = await getProductById(item.productId);
-
-            
-                
-                return {...product._doc,
-                    quntity:item.quntity}
-                
-            }))
-
-            
-            return {
-                ...order._doc,
-                orderedItems:products
-            }
-                   
-
-            
-         }
-         
-         
-         
-         ))
-
-     }catch(err){
-         
-        throw err
-      }
-
-      
-
-      return response;
- }
+  return response;
+};
 
 module.exports = {
-  
-postOrder,
-getAllOrders,
-updateOrderStatus,
-getOrderById,
-deleteOrder,
-getTodaysOrders
-}
+  postOrder,
+  getAllOrders,
+  updateOrderStatus,
+  getOrderById,
+  deleteOrder,
+  getTodaysOrders,
+};
