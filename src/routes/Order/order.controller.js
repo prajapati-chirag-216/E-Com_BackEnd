@@ -5,10 +5,14 @@ const {
   getOrderById,
   deleteOrder,
   getTodaysOrders,
+  getUsersOrders
 } = require("../../model/Order/order.model");
 
 const httpPostOrder = async (req, res) => {
   const userData = req.body;
+
+   
+  userData.userId = req.user._id
 
   const result = await postOrder(userData);
 
@@ -89,6 +93,19 @@ const httpsGetTodaysOrders = async (req, res) => {
   return res.status(200).json(result);
 };
 
+
+const httpGetUserOrders = async(req,res) =>{
+
+  const userId = req.user._id;
+
+  console.log(req.user)
+    
+     const result = await getUsersOrders(userId)
+ 
+    return res.status(200).json(result);
+
+}
+
 module.exports = {
   httpPostOrder,
   httpGetAllOrders,
@@ -96,4 +113,5 @@ module.exports = {
   httpGetOrderById,
   httpDeleteOrder,
   httpsGetTodaysOrders,
+  httpGetUserOrders
 };

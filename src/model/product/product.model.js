@@ -136,4 +136,5 @@ module.exports = {
   postReview,
   getReviews,
   getFilteredProducts,
+  getProductById
 };

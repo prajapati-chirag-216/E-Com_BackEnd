@@ -73,9 +73,10 @@ const verifyUser = async (req, res, next) => {
       ) {
         data = await User.findOne({
           _id: accessTokenDecoded._id,
-        }).select({ name: 1 });
+        })
         req.user = data;
       } else if (refreshTokenDecoded) {
+        console.log('k')
         throw {
           status: status.FORBIDDEN,
           message: {
@@ -104,7 +105,7 @@ const verifyRefreshToken = async (req, res, next) => {
       if (refreshTokenDecoded) {
         data = await User.findOne({
           _id: refreshTokenDecoded._id,
-        }).select({ name: 1 });
+        })
         req.user = data;
       }
     } else {

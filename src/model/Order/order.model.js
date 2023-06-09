@@ -114,6 +114,8 @@ const getTodaysOrders = async () => {
 
         const products = await Promise.all(
           orderedItems.map(async (item) => {
+
+         
             let product = await getProductById(item.productId);
 
             return { ...product._doc, quntity: item.quntity };
@@ -133,6 +135,44 @@ const getTodaysOrders = async () => {
   return response;
 };
 
+
+const getUsersOrders = async(id) =>{
+
+    
+     try{
+        
+         let response = await OrderDb.findOne({userId:id});
+
+    
+
+         let orderedItems = response.orderedItems;
+
+        const products = await Promise.all(
+          orderedItems.map(async (item) => {
+
+           
+            let product = await getProductById(item.productId);
+
+            
+
+            return { ...product._doc, quntity: item.quntity };
+          })
+        );
+
+      
+
+       response = {
+        ...response._doc,
+        orderedItems:products
+       }
+
+      return response
+     }catch(err){
+        
+         throw err;
+     }
+}
+
 module.exports = {
   postOrder,
   getAllOrders,
@@ -140,4 +180,5 @@ module.exports = {
   getOrderById,
   deleteOrder,
   getTodaysOrders,
+  getUsersOrders
 };
