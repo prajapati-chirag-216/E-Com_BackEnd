@@ -4,6 +4,15 @@ const status = require("http-status");
 const { sendResetPasswordEmail } = require("../../utils/email");
 
 const signupUserHandler = async (req, res) => {
+  const accessTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 5),
+    httpOnly: false,
+  };
+  const refreshTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+    httpOnly: true,
+  };
+  
   try {
     const data = await new User({ ...req.body, phoneNo: req.body.phoneNo });
     const { accessToken, refreshToken } = data.getAuthToken();
@@ -28,6 +37,15 @@ const signupUserHandler = async (req, res) => {
   }
 };
 const loginUserHandler = async (req, res) => {
+  const accessTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 5),
+    httpOnly: false,
+  };
+  const refreshTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+    httpOnly: true,
+  };
+  
   try {
     const data = await User.findbyCredentials(
       req.body.email,
@@ -147,6 +165,15 @@ const getAllUsers = async (req, res) => {
 };
 
 const getAccessToken = async (req, res) => {
+  const accessTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 5),
+    httpOnly: false,
+  };
+  const refreshTokenCookieOptions = {
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+    httpOnly: true,
+  };
+  
   try {
     const accessToken = await req.user.getAccessToken();
     const accessTokenCookieOptions = {
@@ -161,6 +188,30 @@ const getAccessToken = async (req, res) => {
     res.status(err.status || status[400]).send(err);
   }
 };
+
+
+const httpUpdateUserInformation =  async(req,res) =>{
+
+     const userObj = req.body;
+     const userId = req.user._id.toString()
+
+     console.log(userObj)
+     console.log(userId)
+     try{
+
+         
+        const response = await User.findByIdAndUpdate({_id:userId},userObj,{new:1})
+
+        // console.log(response)
+
+        return res.status(200).json(response)
+         
+     }catch(err){       
+      res.status(err.status || status[400]).send(err);
+     }
+   
+}
+
 module.exports = {
   signupUserHandler,
   fetchUserHandler,
@@ -168,6 +219,7 @@ module.exports = {
   logoutUserHandler,
   forgotPasswordHandler,
   resetPasswordHandler,
+  httpUpdateUserInformation,
   addCartItemsHandler,
   getAccessToken,
   getAllUsers,

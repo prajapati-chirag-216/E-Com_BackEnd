@@ -10,6 +10,7 @@ const {
   fetchUserHandler,
   getAccessToken,
   getAllUsers,
+  httpUpdateUserInformation
 } = require("./userHandler");
 const userrouter = express.Router();
 userrouter.get("/user/profile", verifyUser, fetchUserHandler);
@@ -21,4 +22,5 @@ userrouter.post("/user/resetPassword/:id", resetPasswordHandler);
 userrouter.post("/addCartItems", auth, addCartItemsHandler);
 userrouter.get("/getAllUsers", getAllUsers);
 userrouter.get("/user/getAccessToken", verifyRefreshToken, getAccessToken);
+userrouter.patch("/updateUser",auth,httpUpdateUserInformation)
 module.exports = userrouter;
