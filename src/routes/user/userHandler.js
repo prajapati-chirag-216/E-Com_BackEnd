@@ -1,18 +1,12 @@
 const User = require("../../model/user/userSchema");
 const crypto = require("crypto");
 const status = require("http-status");
-const { sendResetPasswordEmail } = require("../../utils/email");
+const {
+  sendResetPasswordEmail,
+  sendWelcomeEmail,
+} = require("../../utils/email");
 
 const signupUserHandler = async (req, res) => {
-  const accessTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 5),
-    httpOnly: false,
-  };
-  const refreshTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-    httpOnly: true,
-  };
-  
   try {
     const data = await new User({ ...req.body, phoneNo: req.body.phoneNo });
     const { accessToken, refreshToken } = data.getAuthToken();
@@ -27,6 +21,8 @@ const signupUserHandler = async (req, res) => {
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+    console.log(data.email);
+    // sendWelcomeEmail(data.email);
     res.status(200).send({ success: true });
   } catch (err) {
     res
@@ -37,15 +33,6 @@ const signupUserHandler = async (req, res) => {
   }
 };
 const loginUserHandler = async (req, res) => {
-  const accessTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 5),
-    httpOnly: false,
-  };
-  const refreshTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-    httpOnly: true,
-  };
-  
   try {
     const data = await User.findbyCredentials(
       req.body.email,
@@ -62,6 +49,8 @@ const loginUserHandler = async (req, res) => {
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+    console.log(data.email);
+    // sendWelcomeEmail(data.email);
     res.status(200).send({
       success: true,
       cartItems: data.cartItems,
@@ -85,14 +74,18 @@ const forgotPasswordHandler = async (req, res) => {
   try {
     const data = await User.findOne({ email: req.body.email });
     if (!data || data.length === 0) {
-      throw { message: "No account exist with this E-mail Id", status: 502 };
+      throw {
+        text: "No account exist with this E-mail Id",
+        status: status.UNAUTHORIZED,
+      };
     }
     const resettoken = data.createResetToken();
     await data.save({ validateBeforeSave: false });
-    sendResetPasswordEmail(
-      data.email,
-      `${req.protocol}://localhost:5000/resetPassword/${resettoken}`
-    );
+    console.log(`${req.protocol}://localhost:5000/resetPassword/${resettoken}`);
+    // sendResetPasswordEmail(
+    //   data.email,
+    //   `${req.protocol}://localhost:5000/resetPassword/${resettoken}`
+    // );
     res.status(200).send({ success: true, resettoken });
   } catch (err) {
     res.status(err.status || status[400]).send(err);
@@ -110,7 +103,10 @@ const resetPasswordHandler = async (req, res) => {
       passwordResetExpires: { $gt: Date.now() },
     });
     if (!data || data.length === 0) {
-      throw { message: "Session Time out! Please try again.", status: 502 };
+      throw {
+        text: "Session Time out! Please try again.",
+        status: 440,
+      };
     }
     data.password = req.body.password;
     data.passwordResetToken = undefined;
@@ -165,15 +161,6 @@ const getAllUsers = async (req, res) => {
 };
 
 const getAccessToken = async (req, res) => {
-  const accessTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 5),
-    httpOnly: false,
-  };
-  const refreshTokenCookieOptions = {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-    httpOnly: true,
-  };
-  
   try {
     const accessToken = await req.user.getAccessToken();
     const accessTokenCookieOptions = {
@@ -189,28 +176,20 @@ const getAccessToken = async (req, res) => {
   }
 };
 
+const httpUpdateUserInformation = async (req, res) => {
+  const userObj = req.body;
+  const userId = req.user._id.toString();
 
-const httpUpdateUserInformation =  async(req,res) =>{
+  try {
+    const response = await User.findByIdAndUpdate({ _id: userId }, userObj, {
+      new: 1,
+    });
 
-     const userObj = req.body;
-     const userId = req.user._id.toString()
-
-     console.log(userObj)
-     console.log(userId)
-     try{
-
-         
-        const response = await User.findByIdAndUpdate({_id:userId},userObj,{new:1})
-
-        // console.log(response)
-
-        return res.status(200).json(response)
-         
-     }catch(err){       
-      res.status(err.status || status[400]).send(err);
-     }
-   
-}
+    return res.status(200).json(response);
+  } catch (err) {
+    res.status(err.status || status[400]).send(err);
+  }
+};
 
 module.exports = {
   signupUserHandler,
