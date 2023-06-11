@@ -143,9 +143,13 @@ const getUsersOrders = async(id) =>{
         
          let response = await OrderDb.findOne({userId:id});
 
+        
+         if(!response){
+           return {success:false}
+         }
     
-
-         let orderedItems = response.orderedItems;
+        
+         let orderedItems = response?.orderedItems || [];
 
         const products = await Promise.all(
           orderedItems.map(async (item) => {
@@ -162,11 +166,11 @@ const getUsersOrders = async(id) =>{
       
 
        response = {
-        ...response._doc,
+        ...response?._doc,
         orderedItems:products
        }
 
-      return response
+      return {data:response,success:true}
      }catch(err){
         
          throw err;

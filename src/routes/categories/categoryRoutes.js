@@ -8,6 +8,7 @@ const {
   fetchCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
+  httpGetCategoryByName
 } = require("./categoryHandler");
 const categoryRouter = express.Router();
 
@@ -30,9 +31,15 @@ categoryRouter.get(
   allowUnauthenticated,
   fetchCategoriesHandler
 );
+categoryRouter.get(
+  '/getCategoryByName/:name',
+  allowUnauthenticated,
+  httpGetCategoryByName
+)
 categoryRouter.post("/addCategory", auth, addCategoryHandler);
 categoryRouter.delete("/deleteCategory/:id", auth, deleteCategoryHandler);
 categoryRouter.patch("/updatecategory/:id", updateCategoryHandler);
+
 
 
 

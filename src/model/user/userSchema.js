@@ -110,7 +110,7 @@ userSchema.statics.findbyCredentials = async function (email, password) {
     throw {
       status: status.UNAUTHORIZED,
       message: {
-        text: "Invalide Login details!",
+        text: "Invalide Login details",
         validityStatus: "email",
       },
     };
@@ -120,7 +120,7 @@ userSchema.statics.findbyCredentials = async function (email, password) {
     throw {
       status: status.UNAUTHORIZED,
       message: {
-        text: "Invalide Password !",
+        text: "Invalide Current Password",
         validityStatus: "password",
       },
     };

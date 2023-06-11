@@ -5,6 +5,10 @@ const displaySchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  categoryName:{
+    type:String,
+    required:true
+  },
   text: String,
   label: String,
 });

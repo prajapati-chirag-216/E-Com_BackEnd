@@ -93,6 +93,8 @@ const forgotPasswordHandler = async (req, res) => {
 };
 
 const resetPasswordHandler = async (req, res) => {
+  console.log(req.params.id);
+
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.id)
@@ -180,17 +182,42 @@ const httpUpdateUserInformation = async (req, res) => {
   const userObj = req.body;
   const userId = req.user._id.toString();
 
+  console.log(userObj);
+  console.log(userId);
   try {
     const response = await User.findByIdAndUpdate({ _id: userId }, userObj, {
       new: 1,
     });
+
+    // console.log(response)
 
     return res.status(200).json(response);
   } catch (err) {
     res.status(err.status || status[400]).send(err);
   }
 };
+const httpUpdatePassword = async (req, res) => {
+  const data = req.body;
 
+  const user = req.user;
+
+  console.log(data);
+  const currentPass = data.curPass;
+
+  try {
+    const data = await User.findbyCredentials(user.email, currentPass);
+
+    data.password = req.body.newPass;
+
+    await data.save();
+
+    console.log(data);
+
+    return res.status(200).send({ success: true });
+  } catch (err) {
+    res.status(err.status || 400).send(err.message || "somthing went Wrong");
+  }
+};
 module.exports = {
   signupUserHandler,
   fetchUserHandler,
@@ -202,4 +229,5 @@ module.exports = {
   addCartItemsHandler,
   getAccessToken,
   getAllUsers,
+  httpUpdatePassword,
 };
