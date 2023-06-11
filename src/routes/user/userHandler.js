@@ -4,15 +4,6 @@ const status = require("http-status");
 const { sendResetPasswordEmail } = require("../../utils/email");
 const { response } = require("express");
 
-const accessTokenCookieOptions = {
-  expires: new Date(Date.now() + 1000 * 60 * 5),
-  httpOnly: false,
-};
-const refreshTokenCookieOptions = {
-  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-  httpOnly: true,
-};
-
 const signupUserHandler = async (req, res) => {
   const accessTokenCookieOptions = {
     expires: new Date(Date.now() + 1000 * 60 * 5),
@@ -26,13 +17,19 @@ const signupUserHandler = async (req, res) => {
   try {
     const data = await new User({ ...req.body, phoneNo: req.body.phoneNo });
     const { accessToken, refreshToken } = data.getAuthToken();
-    console.log(data);
     await data.save();
+    const accessTokenCookieOptions = {
+      expires: new Date(Date.now() + 1000 * 60 * 5),
+      httpOnly: false,
+    };
+    const refreshTokenCookieOptions = {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+      httpOnly: true,
+    };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     res.status(200).send({ success: true });
   } catch (err) {
-    console.log(err);
     res
       .status(err.status || (err.code === 11000 ? 409 : 400))
       .send(
@@ -56,6 +53,14 @@ const loginUserHandler = async (req, res) => {
       req.body.password
     );
     const { accessToken, refreshToken } = await data.getAuthToken();
+    const accessTokenCookieOptions = {
+      expires: new Date(Date.now() + 1000 * 60 * 5),
+      httpOnly: false,
+    };
+    const refreshTokenCookieOptions = {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+      httpOnly: true,
+    };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     res.status(200).send({
@@ -63,7 +68,6 @@ const loginUserHandler = async (req, res) => {
       cartItems: data.cartItems,
     });
   } catch (err) {
-    console.log(err);
     res.status(err.status || 400).send(err.message || "somthing went Wrong");
   }
 };
@@ -124,7 +128,7 @@ const resetPasswordHandler = async (req, res) => {
 };
 const fetchUserHandler = async (req, res) => {
   try {
-    res.status(200).send({ userProfile: req.user });
+    res.status(200).send({ userProfile: req.user || null });
   } catch (err) {
     res.status(err.status || status[400]).send(err);
   }
@@ -176,6 +180,10 @@ const getAccessToken = async (req, res) => {
   
   try {
     const accessToken = await req.user.getAccessToken();
+    const accessTokenCookieOptions = {
+      expires: new Date(Date.now() + 1000 * 60 * 5),
+      httpOnly: false,
+    };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.status(200).send({
       success: true,

@@ -78,7 +78,7 @@ userSchema.methods.getAuthToken = function () {
     { _id: user._id.toString() },
     "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610",
     {
-      expiresIn: "6m", // in case it takes some seconds delay
+      expiresIn: "5m", // in case it takes some seconds delay
     }
   );
   const refreshToken = jwt.sign(
@@ -96,7 +96,7 @@ userSchema.methods.getAccessToken = function () {
     { _id: user._id },
     "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610",
     {
-      expiresIn: "6m", // in case it first expires
+      expiresIn: "5m", // in case it first expires
     }
   );
   return accessToken;
