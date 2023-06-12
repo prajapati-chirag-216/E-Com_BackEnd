@@ -13,17 +13,15 @@ const signupUserHandler = async (req, res) => {
     await data.save();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      domain:'localhost',
-      path:'/',
+      domain:'.shopzee-back.onrender.com',
       httpOnly: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      domain:'localhost',
-      path:'/',
+      domain:'.shopzee-back.onrender.com',
       httpOnly: true,
     };
-    res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
+    // res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
