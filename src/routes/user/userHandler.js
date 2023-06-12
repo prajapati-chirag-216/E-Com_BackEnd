@@ -23,6 +23,7 @@ const signupUserHandler = async (req, res) => {
       path:'/',
       httpOnly: true,
     };
+    res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
@@ -55,6 +56,7 @@ const loginUserHandler = async (req, res) => {
       path:'/',
       httpOnly: true,
     };
+    res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
