@@ -2,11 +2,10 @@ const OrderDb = require("../Order/order.mongo");
 const { getProductById } = require("../product/product.model");
 
 const postOrder = async (userData) => {
-  const data = await new OrderDb(userData);
-
   let result;
 
   try {
+    const data = new OrderDb(userData);
     result = await data.save();
   } catch (err) {
     throw err;
@@ -114,8 +113,6 @@ const getTodaysOrders = async () => {
 
         const products = await Promise.all(
           orderedItems.map(async (item) => {
-
-         
             let product = await getProductById(item.productId);
 
             return { ...product._doc, quntity: item.quntity };
@@ -135,47 +132,16 @@ const getTodaysOrders = async () => {
   return response;
 };
 
-
-const getUsersOrders = async(id) =>{
-
-    
-     try{
-        
-         let response = await OrderDb.findOne({userId:id});
-
-        
-         if(!response){
-           return {success:false}
-         }
-    
-        
-         let orderedItems = response?.orderedItems || [];
-
-        const products = await Promise.all(
-          orderedItems.map(async (item) => {
-
-           
-            let product = await getProductById(item.productId);
-
-            
-
-            return { ...product._doc, quntity: item.quntity };
-          })
-        );
-
-      
-
-       response = {
-        ...response?._doc,
-        orderedItems:products
-       }
-
-      return {data:response,success:true}
-     }catch(err){
-        
-         throw err;
-     }
-}
+const getUsersOrders = async (id) => {
+  try {
+    let response = await OrderDb.find({ userId: id }).populate(
+      "orderedItems.productId"
+    );
+    return { data: response, success: true };
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   postOrder,
@@ -184,5 +150,5 @@ module.exports = {
   getOrderById,
   deleteOrder,
   getTodaysOrders,
-  getUsersOrders
+  getUsersOrders,
 };
