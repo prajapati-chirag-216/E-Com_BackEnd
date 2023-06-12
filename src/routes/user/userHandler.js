@@ -25,7 +25,6 @@ const signupUserHandler = async (req, res) => {
       sameSite: "None",
       secure: true,
     };
-    // res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
@@ -61,10 +60,6 @@ const loginUserHandler = async (req, res) => {
       sameSite: "None",
       secure: true,
     };
-    res.setHeader(
-      "Set-Cookie",
-      `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`
-    );
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
@@ -99,7 +94,6 @@ const forgotPasswordHandler = async (req, res) => {
     }
     const resettoken = data.createResetToken();
     await data.save({ validateBeforeSave: false });
-    console.log(`${req.protocol}://localhost:5000/resetPassword/${resettoken}`);
     // sendResetPasswordEmail(
     //   data.email,
     //   `${req.protocol}://localhost:5000/resetPassword/${resettoken}`

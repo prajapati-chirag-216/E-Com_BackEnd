@@ -8,13 +8,13 @@ const {
   fetchCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
-  httpGetCategoryByName
+  httpGetCategoryByName,
 } = require("./categoryHandler");
 const categoryRouter = express.Router();
 
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
-  if (origin === "http://localhost:5000") {
+  if (origin === "https://shopzee-back.onrender.com/") {
     return next();
   } else {
     auth(req, res, next);
@@ -32,15 +32,12 @@ categoryRouter.get(
   fetchCategoriesHandler
 );
 categoryRouter.get(
-  '/getCategoryByName/:name',
+  "/getCategoryByName/:name",
   allowUnauthenticated,
   httpGetCategoryByName
-)
+);
 categoryRouter.post("/addCategory", auth, addCategoryHandler);
 categoryRouter.delete("/deleteCategory/:id", auth, deleteCategoryHandler);
 categoryRouter.patch("/updatecategory/:id", updateCategoryHandler);
-
-
-
 
 module.exports = categoryRouter;
