@@ -14,14 +14,12 @@ const signupUserHandler = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       domain: "e-com-front-end-8zwh.vercel.app",
-      httpOnly: true,
       sameSite: "None",
       secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       domain: "e-com-front-end-8zwh.vercel.app",
-      httpOnly: true,
       sameSite: "None",
       secure: true,
     };
@@ -49,14 +47,12 @@ const loginUserHandler = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       domain: "e-com-front-end-8zwh.vercel.app",
-      httpOnly: true,
       sameSite: "None",
       secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       domain: "e-com-front-end-8zwh.vercel.app",
-      httpOnly: true,
       sameSite: "None",
       secure: true,
     };
