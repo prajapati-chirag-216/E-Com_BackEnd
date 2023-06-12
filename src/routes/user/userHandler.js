@@ -13,14 +13,17 @@ const signupUserHandler = async (req, res) => {
     await data.save();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
+      domain: ".shopzee-back.onrender.com",
       httpOnly: true,
-      domain: "localhost",
-      path: "/",
+      sameSite: "None",
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+      domain: ".shopzee-back.onrender.com",
       httpOnly: true,
+      sameSite: "None",
     };
+    // res.setHeader("Set-Cookie", `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`);
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);
@@ -44,12 +47,21 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
+      domain: ".shopzee-back.onrender.com",
       httpOnly: true,
+      sameSite: "None",
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+      domain: ".shopzee-back.onrender.com",
       httpOnly: true,
+      // Set this to true if using HTTPS
+      sameSite: "None",
     };
+    res.setHeader(
+      "Set-Cookie",
+      `accessToken=${accessToken}; HttpOnly; Path=/; Domain=localhost; Expires=${accessTokenCookieOptions.expires}`
+    );
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
     console.log(data.email);

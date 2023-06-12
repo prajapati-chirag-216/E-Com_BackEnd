@@ -12,8 +12,9 @@ const orderRouter = require("./routes/Order/order.routes");
 const contactUsRouter = require("./routes/ContactUs/Contactus.route");
 const app = express();
 app.use(
+  "*",
   cors({
-    origin: ["http://localhost:3000", "http://localhost:5000"],
+    origin: true,
     // origin: ["http://localhost:3000", "http://localhost:5000"],
     credentials: true,
   })
