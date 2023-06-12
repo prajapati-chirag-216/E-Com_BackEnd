@@ -9,7 +9,7 @@ const displayImgrouter = require("./routes/displayImg/displayRoutes");
 const categoryRouter = require("./routes/categories/categoryRoutes");
 const userRouter = require("./routes/user/userRoutes");
 const orderRouter = require("./routes/Order/order.routes");
-const contactUsRouter = require('./routes/ContactUs/Contactus.route')
+const contactUsRouter = require("./routes/ContactUs/Contactus.route");
 const app = express();
 
 app.use((req, res, next) => {
@@ -20,9 +20,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('*',
+
+app.use(
+  "*",
   cors({
     origin: true,
+    // origin: ["http://localhost:3000", "http://localhost:5000"],
     credentials: true,
   })
 );
@@ -39,6 +42,6 @@ app.use(displayImgrouter);
 app.use(categoryRouter);
 app.use(userRouter);
 app.use(orderRouter);
-app.use(contactUsRouter)
+app.use(contactUsRouter);
 
 module.exports = app;

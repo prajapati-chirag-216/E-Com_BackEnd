@@ -50,6 +50,7 @@ const auth = async (req, res, next) => {
   }
 };
 const verifyUser = async (req, res, next) => {
+  console.log("varify");
   try {
     const accessToken = req.cookies["accessToken"];
     const refreshToken = req.cookies["refreshToken"];

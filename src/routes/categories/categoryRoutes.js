@@ -8,15 +8,18 @@ const {
   fetchCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
-  httpGetCategoryByName
+  httpGetCategoryByName,
 } = require("./categoryHandler");
 const categoryRouter = express.Router();
 
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
-  if (origin === "http://localhost:5000") {
+  console.log(origin);
+  if (origin === "https://e-com-front-end-8zwh.vercel.app") {
+    console.log("here");
     return next();
   } else {
+    console.log("in auth");
     auth(req, res, next);
   }
 }
@@ -32,15 +35,12 @@ categoryRouter.get(
   fetchCategoriesHandler
 );
 categoryRouter.get(
-  '/getCategoryByName/:name',
+  "/getCategoryByName/:name",
   allowUnauthenticated,
   httpGetCategoryByName
-)
+);
 categoryRouter.post("/addCategory", auth, addCategoryHandler);
 categoryRouter.delete("/deleteCategory/:id", auth, deleteCategoryHandler);
 categoryRouter.patch("/updatecategory/:id", updateCategoryHandler);
-
-
-
 
 module.exports = categoryRouter;
