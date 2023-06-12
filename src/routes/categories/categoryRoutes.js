@@ -15,7 +15,7 @@ const categoryRouter = express.Router();
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
   console.log(origin);
-  if (origin === "https://shopzee-back.onrender.com") {
+  if (origin === "https://e-com-front-end-8zwh.vercel.app") {
     console.log("here");
     return next();
   } else {

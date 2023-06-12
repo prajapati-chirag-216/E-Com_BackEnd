@@ -11,7 +11,8 @@ const displayImgrouter = express.Router();
 
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
-  if (origin === "https://shopzee-back.onrender.com/") {
+  console.log("display");
+  if (origin === "https://e-com-front-end-8zwh.vercel.app") {
     return next();
   } else {
     auth(req, res, next);
