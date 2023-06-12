@@ -1,10 +1,12 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const PORT = 8000;
-const MONGO_URI =
-  //   "mongodb+srv://chirag:chirag@123@cluster0.uqscvba.mongodb.net/?retryWrites=true&w=majority";
-  "mongodb+srv://yash8194:yash8194@cluster0.eefe6vn.mongodb.net/?retryWrites=true&w=majority";
+require('dotenv').config()
 
+
+
+const MONGO_URI =  process.env.MONGO_URL
+  
 mongoose.connection.on("error", (err) => {
   console.error(err);
 });
