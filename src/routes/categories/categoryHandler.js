@@ -16,6 +16,7 @@ const addCategoryHandler = async (req, res) => {
 const fetchCategoriesHandler = async (req, res) => {
   try {
     const data = await Category.find();
+    console.log("data");
     res.status(200).send(data);
   } catch (err) {
     res.status(err.status || 404).send(err || "somthing went Wrong!");
@@ -61,24 +62,20 @@ const deleteCategoryHandler = async (req, res) => {
   }
 };
 
-const httpGetCategoryByName = async(req,res) =>{
-
-  
+const httpGetCategoryByName = async (req, res) => {
   const catagoryName = req.params.name;
-  console.log(catagoryName)
+  console.log(catagoryName);
 
-     
-   try{
-       const data = await  Category.findOne({name:catagoryName}).select({_id:1});
+  try {
+    const data = await Category.findOne({ name: catagoryName }).select({
+      _id: 1,
+    });
 
-       
-          
-       return res.status(200).json(data._id.toString());
-
-   }catch (err) {
+    return res.status(200).json(data._id.toString());
+  } catch (err) {
     res.status(err.status || 404).send(err.message || "somthing went Wrong!");
   }
-}
+};
 
 module.exports = {
   fetchCategoriesHandler,
@@ -86,5 +83,5 @@ module.exports = {
   addCategoryHandler,
   deleteCategoryHandler,
   updateCategoryHandler,
-  httpGetCategoryByName
+  httpGetCategoryByName,
 };
