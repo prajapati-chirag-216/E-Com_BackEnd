@@ -1,12 +1,9 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const PORT = 8000;
-require('dotenv').config()
+require("dotenv").config();
+const MONGO_URI = process.env.MONGO_URL;
 
-
-
-const MONGO_URI =  process.env.MONGO_URL
-  
 mongoose.connection.on("error", (err) => {
   console.error(err);
 });
