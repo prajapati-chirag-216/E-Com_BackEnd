@@ -11,14 +11,13 @@ const userRouter = require("./routes/user/userRoutes");
 const orderRouter = require("./routes/Order/order.routes");
 const contactUsRouter = require("./routes/ContactUs/Contactus.route");
 const app = express();
-app.use(
-  "*",
-  cors({
-    origin: true,
-    // origin: ["http://localhost:3000", "http://localhost:5000"],
-    credentials: true,
-  })
-);
+app.use(cors({ credentials: true }));
+
+// {
+// origin: true,
+// // origin: ["http://localhost:3000", "http://localhost:5000"],
+// credentials: true,
+// }
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));

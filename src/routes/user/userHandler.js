@@ -15,15 +15,15 @@ const signupUserHandler = async (req, res) => {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       domain: "e-com-front-end-8zwh.vercel.app",
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      // sameSite: "None",
+      // secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       domain: "e-com-front-end-8zwh.vercel.app",
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      // sameSite: "None",
+      // secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
@@ -50,15 +50,11 @@ const loginUserHandler = async (req, res) => {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       domain: "e-com-front-end-8zwh.vercel.app",
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       domain: "e-com-front-end-8zwh.vercel.app",
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
