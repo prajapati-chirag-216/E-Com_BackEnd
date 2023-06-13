@@ -48,12 +48,12 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      domain: "adminpanelbackend-production.up.railway.app",
-      httpOnly: true,
+      domain: "e-com-front-end-8zwh.vercel.app",
+      // httpOnly: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      domain: "adminpanelbackend-production.up.railway.app",
+      // domain: "adminpanelbackend-production.up.railway.app",
       httpOnly: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
