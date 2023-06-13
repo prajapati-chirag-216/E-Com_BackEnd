@@ -11,6 +11,15 @@ const userRouter = require("./routes/user/userRoutes");
 const orderRouter = require("./routes/Order/order.routes");
 const contactUsRouter = require("./routes/ContactUs/Contactus.route");
 const app = express();
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "https://shopzee.onrender.com");
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+//   next();
+// });
+
 app.use(cors({ credentials: true }));
 
 // {
