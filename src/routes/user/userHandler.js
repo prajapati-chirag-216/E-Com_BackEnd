@@ -13,17 +13,17 @@ const signupUserHandler = async (req, res) => {
     await data.save();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      domain: "e-com-front-end-8zwh.vercel.app",
+      domain: "shopzee.onrender.com",
       httpOnly: true,
-      // sameSite: "None",
-      // secure: true,
+      sameSite: "None",
+      secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      domain: "e-com-front-end-8zwh.vercel.app",
+      domain: "shopzee.onrender.com",
       httpOnly: true,
-      // sameSite: "None",
-      // secure: true,
+      sameSite: "None",
+      secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
@@ -48,13 +48,21 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      domain: "e-com-front-end-8zwh.vercel.app",
-      // httpOnly: true,
+      domain: "shopzee.onrender.com",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+
+
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // domain: "adminpanelbackend-production.up.railway.app",
+      domain: "shopzee.onrender.com",
       httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      
+
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
