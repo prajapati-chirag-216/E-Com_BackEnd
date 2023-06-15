@@ -16,6 +16,7 @@ function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
   console.log(origin);
   if (origin === "https://shopzee.onrender.com") {
+    // if (origin === "http://localhost:5000") {
     console.log("here");
     return next();
   } else {
