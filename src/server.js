@@ -1,6 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 require("dotenv").config();
 const MONGO_URI = process.env.MONGO_URL;
 
@@ -11,7 +11,7 @@ mongoose.connection.on("error", (err) => {
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server Listning on ${PORT} ..`);
     });
   })
