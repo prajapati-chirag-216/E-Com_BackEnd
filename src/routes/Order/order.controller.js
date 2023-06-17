@@ -12,7 +12,7 @@ const httpPostOrder = async (req, res) => {
   const userData = req.body;
   userData.userId = req.user._id;
   try {
-    const result = await postOrder(userData);
+    const result = await postOrder(userData,req.user._id);
     console.log(result);
     if (!result) {
       throw { message: "Order canceled" };

@@ -17,10 +17,10 @@ function allowUnauthenticated(req, res, next) {
   console.log(origin);
   if (origin === "https://shopzee.onrender.com") {
     // if (origin === "http://localhost:5000") {
-    console.log("here");
+    
     return next();
   } else {
-    console.log("in auth");
+   
     auth(req, res, next);
   }
 }

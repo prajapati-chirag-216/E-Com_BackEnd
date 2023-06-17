@@ -13,14 +13,12 @@ const signupUserHandler = async (req, res) => {
     await data.save();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      // domain: ".shopzee.onrender.com",
       httpOnly: true,
       sameSite: "None",
       secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // domain: ".shopzee.onrender.com",
       httpOnly: true,
       sameSite: "None",
       secure: true,
@@ -48,7 +46,6 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      // domain: ".onrender.com",
       httpOnly: true,
       secure: true,
       sameSite: "None",
@@ -57,7 +54,6 @@ const loginUserHandler = async (req, res) => {
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // domain: ".onrender.com",
       httpOnly: true,
       secure: true,
       sameSite: "None",
