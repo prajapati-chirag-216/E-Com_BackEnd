@@ -46,17 +46,17 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      // httpOnly: true,
+      // secure: true,
+      // sameSite: "None",
 
 
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      // httpOnly: true,
+      // secure: true,
+      // sameSite: "None",
       
 
     };
