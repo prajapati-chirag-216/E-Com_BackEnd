@@ -47,16 +47,16 @@ const loginUserHandler = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       // httpOnly: true,
-      // secure: true,
-      // sameSite: "None",
+      secure: true,
+      sameSite: "None",
 
 
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       // httpOnly: true,
-      // secure: true,
-      // sameSite: "None",
+      secure: true,
+      sameSite: "None",
       
 
     };
@@ -75,8 +75,10 @@ const loginUserHandler = async (req, res) => {
 
 const logoutUserHandler = (req, res) => {
   try {
-    res.clearCookie("refreshToken");
-    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken",{ secure: true,
+      sameSite: "None"});
+    res.clearCookie("accessToken",{ secure: true,
+      sameSite: "None"});
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(err.status || status.BAD_REQUEST).send(err);
