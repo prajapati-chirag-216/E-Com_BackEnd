@@ -13,34 +13,30 @@ const signupUserHandler = async (req, res) => {
     await data.save();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      // domain: ".shopzee.onrender.com",
       httpOnly: true,
       sameSite: "None",
       secure: true,
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // domain: ".shopzee.onrender.com",
       httpOnly: true,
       sameSite: "None",
       secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-    console.log(data.email);
     // sendWelcomeEmail(data.email);
     res.status(200).send({ success: true });
   } catch (err) {
     res
       .status(err.status || (err.code === 11000 ? 409 : 400))
       .send(
-        err.code === 11000 ? { text: "e-mail is already registered" } : err
-      );
-  }
+          err.code === 11000 ? { text: "e-mail is already registered" } : err
+        );
+    }
 };
 const loginUserHandler = async (req, res) => {
   try {
-    // console.log("ran");
     const data = await User.findbyCredentials(
       req.body.email,
       req.body.password
@@ -48,25 +44,18 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      // domain: ".onrender.com",
       httpOnly: true,
       secure: true,
       sameSite: "None",
-
-
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // domain: ".onrender.com",
       httpOnly: true,
       secure: true,
       sameSite: "None",
-      
-
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-    console.log(data.email);
     // sendWelcomeEmail(data.email);
     res.status(200).send({
       success: true,
@@ -104,13 +93,11 @@ const forgotPasswordHandler = async (req, res) => {
     // );
     res.status(200).send({ success: true, resettoken });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
 const resetPasswordHandler = async (req, res) => {
-  console.log(req.params.id);
-
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.id)
@@ -133,15 +120,14 @@ const resetPasswordHandler = async (req, res) => {
 
     return res.status(200).send({ status: true });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const fetchUserHandler = async (req, res) => {
-  console.log("fetcing");
   try {
     res.status(200).send({ userProfile: req.user || null });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const addCartItemsHandler = async (req, res) => {
@@ -165,7 +151,7 @@ const addCartItemsHandler = async (req, res) => {
     await data.save();
     await res.status(200).send({ success: true, cartItems });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
@@ -191,7 +177,7 @@ const getAccessToken = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
@@ -205,7 +191,7 @@ const httpUpdateUserInformation = async (req, res) => {
     });
     return res.status(200).json(response);
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const httpUpdatePassword = async (req, res) => {

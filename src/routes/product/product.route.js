@@ -8,10 +8,8 @@ const {
   httpAddProduct,
   httpdeleteProduct,
   httpUpdateProduct,
-  httpPostReview,
-  httpGetProductReviews,
   httpGetFilteredProducts,
-} = require("../../routes/product/product.controller");
+} = require("./product.controller");
 
 const productRouter = express.Router();
 
@@ -21,8 +19,6 @@ productRouter.get("/getproduct", httpGetAllProducts);
 productRouter.post("/addproduct", httpAddProduct);
 productRouter.delete("/deleteproduct/:id", httpdeleteProduct);
 productRouter.patch("/updateproduct/:id", httpUpdateProduct);
-productRouter.post("/productreview/:id", httpPostReview);
-productRouter.get("/getproductReviews/:id", httpGetProductReviews);
 productRouter.get("/getfilteredproducts/:id/:name", httpGetFilteredProducts);
 
 module.exports = productRouter;

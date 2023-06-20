@@ -83,33 +83,6 @@ const httpUpdateProduct = async (req, res) => {
   return res.status(200).json(result);
 };
 
-const httpPostReview = async (req, res) => {
-  const productId = req.params.id;
-  const reviewData = req.body;
-  const result = await postReview(productId, reviewData);
-
-  if (!result) {
-    return res.status(404).json({
-      error: "Review Was Not Posted!",
-    });
-  }
-  res.status(200).json(result);
-};
-
-const httpGetProductReviews = async (req, res) => {
-  const productId = req.params.id;
-
-  const result = await getReviews(productId);
-
-  if (!result) {
-    return res.status(404).json({
-      error: "Review Was Found By Error!",
-    });
-  }
-
-  return res.status(200).json(result);
-};
-
 const httpGetFilteredProducts = async (req, res) => {
   const string = req.params.name;
   const catId = req.params.id;
@@ -132,7 +105,5 @@ module.exports = {
   httpAddProduct,
   httpdeleteProduct,
   httpUpdateProduct,
-  httpPostReview,
-  httpGetProductReviews,
   httpGetFilteredProducts,
 };

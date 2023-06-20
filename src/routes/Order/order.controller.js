@@ -13,7 +13,6 @@ const httpPostOrder = async (req, res) => {
   userData.userId = req.user._id;
   try {
     const result = await postOrder(userData);
-    console.log(result);
     if (!result) {
       throw { message: "Order canceled" };
     }
@@ -106,7 +105,6 @@ const httpGetUserOrders = async (req, res) => {
 
   try {
     const result = await getUsersOrders(userId);
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
     res.status(err.status || 400).send(err.message || "somthing Went Wrong");

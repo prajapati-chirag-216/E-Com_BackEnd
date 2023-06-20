@@ -11,9 +11,10 @@ const displayImgrouter = express.Router();
 
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
-  console.log("display");
-  if (origin === "https://shopzee.onrender.com") {
-    // if (origin === "http://localhost:5000") {
+  if (
+    origin === "https://shopzee.onrender.com" ||
+    origin === "http://localhost:5000"
+  ) {
     return next();
   } else {
     auth(req, res, next);

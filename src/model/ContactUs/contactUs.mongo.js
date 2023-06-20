@@ -1,25 +1,21 @@
-
-const mongoose = require('mongoose')
-
+const mongoose = require("mongoose");
 
 const UsermeassageSchema = new mongoose.Schema({
+  userName: {
+    type: String,
+    required: true,
+  },
+  userEmail: {
+    type: String,
+    required: true,
+  },
+  phonNo: {
+    type: String,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+});
 
-    userName:{
-         type:String,
-         required:true
-    },
-    userEmail:{
-        type:String,
-        required:true
-    },
-    phonNo:{
-        type:String,
-    },
-    message:{
-        type:String,
-        required:true
-    }
-
-})
-
-module.exports = mongoose.model('UserMessage',UsermeassageSchema)
+module.exports = mongoose.model("UserMessage", UsermeassageSchema);
