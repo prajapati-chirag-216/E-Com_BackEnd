@@ -1,12 +1,21 @@
 const OrderDb = require("../Order/order.mongo");
+const User = require('../user/userSchema')
 const { getProductById } = require("../product/product.model");
 
-const postOrder = async (userData) => {
+
+const postOrder = async (userData,userId) => {
   let result;
+
+
 
   try {
     const data = new OrderDb(userData);
     result = await data.save();
+ 
+     const response = await User.findByIdAndUpdate({_id:userId},{cartItems:[]},{new:true})
+
+     console.log(response)
+     
   } catch (err) {
     throw err;
   }

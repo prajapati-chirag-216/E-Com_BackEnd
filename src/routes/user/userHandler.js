@@ -31,9 +31,9 @@ const signupUserHandler = async (req, res) => {
     res
       .status(err.status || (err.code === 11000 ? 409 : 400))
       .send(
-          err.code === 11000 ? { text: "e-mail is already registered" } : err
-        );
-    }
+        err.code === 11000 ? { text: "e-mail is already registered" } : err
+      );
+  }
 };
 const loginUserHandler = async (req, res) => {
   try {
@@ -68,8 +68,8 @@ const loginUserHandler = async (req, res) => {
 
 const logoutUserHandler = (req, res) => {
   try {
-    res.clearCookie("refreshToken");
-    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken", { secure: true, sameSite: "None" });
+    res.clearCookie("accessToken", { secure: true, sameSite: "None" });
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(err.status || status.BAD_REQUEST).send(err);
