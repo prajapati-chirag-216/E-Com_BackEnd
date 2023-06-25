@@ -158,7 +158,6 @@ const addCartItemsHandler = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const result = await User.find();
-
     return res.status(200).json(result);
   } catch (err) {
     throw err;
@@ -171,6 +170,8 @@ const getAccessToken = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       httpOnly: true,
+      sameSite: "None",
+      secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.status(200).send({

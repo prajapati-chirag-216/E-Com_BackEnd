@@ -11,7 +11,10 @@ mongoose.connection.on("error", (err) => {
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    app.listen(PORT, "0.0.0.0", () => {
+    // app.listen(PORT, () => {
+    //   console.log(`Server Listning on ${PORT} ..`);
+    // });
+    app.listen(PORT, () => {
       console.log(`Server Listning on ${PORT} ..`);
     });
   })

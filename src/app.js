@@ -14,11 +14,7 @@ const productReviewRouter = require("./routes/productReview/productReview.routes
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", [
-    "https://shopzee.onrender.com",
-    "http://192.168.0.108:5000",
-    "http://localhost:3000",
-  ]);
+  res.setHeader("Access-Control-Allow-Origin", "https://shopzee.onrender.com");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -27,11 +23,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: [
-      "https://shopzee.onrender.com",
-      "http://localhost:5000",
-      "http://localhost:3000",
-    ],
+    origin: "https://shopzee.onrender.com",
     credentials: true,
   })
 );
