@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    userId:{
-      type:mongoose.Schema.Types.ObjectId,
-      required:true,
-      ref:'User'
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
     },
     contactInformation: {
       email: {
@@ -43,6 +43,10 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+    },
+    shippingMethod: {
+      type: String,
+      required: true,
     },
     deliveryStatus: {
       type: String,

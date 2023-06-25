@@ -1,5 +1,6 @@
 const {
   postOrder,
+  getOrder,
   getAllOrders,
   updateOrderStatus,
   getOrderById,
@@ -13,7 +14,6 @@ const httpPostOrder = async (req, res) => {
   userData.userId = req.user._id;
   try {
     const result = await postOrder(userData, req.user._id);
-    console.log(result);
     if (!result) {
       throw { message: "Order canceled" };
     }
@@ -23,6 +23,17 @@ const httpPostOrder = async (req, res) => {
   }
 };
 
+const httpGetOrder = async (req, res) => {
+  try {
+    const result = await getOrder(req.params.id);
+    if (!result) {
+      throw { message: "Order was Not Found" };
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(err.status || 400).send(err.message || "somthing Went Wrong");
+  }
+};
 const httpGetAllOrders = async (req, res) => {
   try {
     const result = await getAllOrders();
@@ -91,7 +102,6 @@ const httpDeleteOrder = async (req, res) => {
 const httpsGetTodaysOrders = async (req, res) => {
   try {
     const result = await getTodaysOrders();
-
     if (!result) {
       throw { message: "Your Order was Not Found" };
     }
@@ -103,7 +113,6 @@ const httpsGetTodaysOrders = async (req, res) => {
 
 const httpGetUserOrders = async (req, res) => {
   const userId = req.user._id;
-
   try {
     const result = await getUsersOrders(userId);
     res.status(200).json(result);
@@ -114,6 +123,7 @@ const httpGetUserOrders = async (req, res) => {
 
 module.exports = {
   httpPostOrder,
+  httpGetOrder,
   httpGetAllOrders,
   httpOrderStatus,
   httpGetOrderById,
