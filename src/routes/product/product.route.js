@@ -1,25 +1,41 @@
 const express = require("express");
-// const auth = require("../../auth");
+const { adminAuth } = require("../../auth");
+const roleTypes = require("../../utils/roleTypes");
 
 const {
   httpGetProduct,
   httpGetAllProducts,
   httpGetProductDetails,
   httpAddProduct,
-  httpdeleteProduct,
+  httpDeleteProduct,
   httpUpdateProduct,
   httpGetFilteredProducts,
   httpDeleteReview
 } = require("../../routes/product/product.controller");
 
 const productRouter = express.Router();
-
 productRouter.get("/getproduct/:id", httpGetProduct);
 productRouter.get("/getproductDetails/:id", httpGetProductDetails);
-productRouter.get("/getproduct", httpGetAllProducts);
-productRouter.post("/addproduct", httpAddProduct);
-productRouter.delete("/deleteproduct/:id", httpdeleteProduct);
-productRouter.patch("/updateproduct/:id", httpUpdateProduct);
+productRouter.get(
+  "/getproducts",
+  adminAuth(roleTypes.FETCH_PRODUCTS),
+  httpGetAllProducts
+);
+productRouter.post(
+  "/addproduct",
+  adminAuth(roleTypes.ADD_PRODUCT),
+  httpAddProduct
+);
+productRouter.delete(
+  "/deleteproduct/:id",
+  adminAuth(roleTypes.DELETE_PRODUCT),
+  httpDeleteProduct
+);
+productRouter.patch(
+  "/updateproduct/:id",
+  adminAuth(roleTypes.UPDATE_PRODUCT),
+  httpUpdateProduct
+);
 productRouter.get("/getfilteredproducts/:id/:name", httpGetFilteredProducts);
 
 module.exports = productRouter;

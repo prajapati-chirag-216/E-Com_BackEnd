@@ -1,6 +1,6 @@
 const express = require("express");
-const auth = require("../../auth");
-const multer = require("multer");
+const { adminAuth } = require("../../auth");
+const roleTypes = require("../../utils/roleTypes");
 
 const {
   addImageHandler,
@@ -9,30 +9,34 @@ const {
 } = require("./displayHandler");
 const displayImgrouter = express.Router();
 
-function allowUnauthenticated(req, res, next) {
-  const { origin } = req.headers;
-  if (
-    origin === "https://shopzee.onrender.com"   ||                                  // comment outif your are testing
-    // origin === "http://192.168.0.108:5000" ||
-    origin === "http://localhost:5000"
-  ) {
-    // if(origin === 'http:// 192.168.43.226:5000' || origin === "http://localhost:5000"){   // comment out if not styling for responsive web  
-    return next();
-  } else {
-    auth(req, res, next);
-  }
+function allowUnauthenticated(role) {
+  return (req, res, next) => {
+    const { origin } = req.headers;
+    if (
+      origin === "https://shopzee.onrender.com" ||
+      origin === "http://localhost:5000"
+    ) {
+      return next();
+    } else {
+      adminAuth(role)(req, res, next);
+    }
+  };
 }
 
-displayImgrouter.post("/admin/addDisplayImage", auth, addImageHandler);
+displayImgrouter.post(
+  "/addDisplayImage",
+  adminAuth(roleTypes.ADD_DISPLAY),
+  addImageHandler
+);
 
 displayImgrouter.get(
-  "/admin/fetchDisplayImage",
-  allowUnauthenticated,
+  "/fetchDisplayImage",
+  allowUnauthenticated(roleTypes.FETCH_DISPLAY),
   fetchImageHandler
 );
 displayImgrouter.delete(
-  "/admin/deleteDisplayImage/:id",
-  auth,
+  "/deleteDisplayImage/:id",
+  adminAuth(roleTypes.DELETE_DISPLAY),
   deleteImageHandler
 );
 module.exports = displayImgrouter;
