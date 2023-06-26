@@ -4,6 +4,7 @@ const { adminAuth } = require("../../auth");
 const {
   httpPostReview,
   httpGetProductReviews,
+  httpDeleteReview,
 } = require("./productReview.controller");
 const roleTypes = require("../../utils/roleTypes");
 
@@ -28,5 +29,6 @@ productReviewRouter.get(
   allowUnauthenticated(roleTypes.FETCH_REVIEWS),
   httpGetProductReviews
 );
+productReviewRouter.delete("/deletereview/:id", httpDeleteReview);
 
 module.exports = productReviewRouter;

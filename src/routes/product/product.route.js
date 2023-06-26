@@ -10,7 +10,8 @@ const {
   httpDeleteProduct,
   httpUpdateProduct,
   httpGetFilteredProducts,
-} = require("./product.controller");
+  httpDeleteReview
+} = require("../../routes/product/product.controller");
 
 const productRouter = express.Router();
 productRouter.get("/getproduct/:id", httpGetProduct);

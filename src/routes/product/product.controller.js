@@ -7,6 +7,7 @@ const {
   postReview,
   getReviews,
   getFilteredProducts,
+  deleteReview
 } = require("../../model/product/product.model");
 
 const httpGetProduct = async (req, res) => {
@@ -98,6 +99,8 @@ const httpGetFilteredProducts = async (req, res) => {
   return res.status(200).json(result);
 };
 
+
+
 module.exports = {
   httpGetProduct,
   httpGetProductDetails,
@@ -106,4 +109,5 @@ module.exports = {
   httpDeleteProduct,
   httpUpdateProduct,
   httpGetFilteredProducts,
+
 };

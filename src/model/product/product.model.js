@@ -100,6 +100,11 @@ const updateProduct = async (productData, productId) => {
   return res;
 };
 
+
+
+
+
+
 module.exports = {
   getProducts,
   getProductDetails,
@@ -108,4 +113,5 @@ module.exports = {
   updateProduct,
   getFilteredProducts,
   getProductById,
+ 
 };

@@ -36,25 +36,36 @@ const getAllOrders = async () => {
   let orders;
 
   try {
-    orders = await OrderDb.find();
 
-    orders = await Promise.all(
-      orders.map(async (order) => {
-        let orderedItems = order.orderedItems;
 
-        const products = await Promise.all(
-          orderedItems.map(async (item) => {
-            let product = await getProductById(item.productId);
-
-            return { ...product._doc, quntity: item.quntity };
-          })
-        );
-        return {
-          ...order._doc,
-          orderedItems: products,
-        };
-      })
+ 
+     orders = await OrderDb.find().populate(
+      "orderedItems.productId"
     );
+
+    // console.log(orders.orderedItems)
+    
+    // orders = await OrderDb.find();
+
+    // orders = await Promise.all(
+    //   orders.map(async (order) => {
+    //     let orderedItems = order.orderedItems;
+
+    //     const products = await Promise.all(
+    //       orderedItems.map(async (item) => {
+    //         let product = await getProductById(item.productId);
+
+    //         return { ...product, quntity: item.quntity };
+    //       })
+    //     );
+    //     return {
+    //       ...order._doc,
+    //       orderedItems: products,
+    //     };
+    //   })
+    // );
+
+    return orders
   } catch (err) {
     throw err;
   }

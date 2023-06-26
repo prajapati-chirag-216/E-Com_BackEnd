@@ -45,11 +45,13 @@ const loginUserHandler = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "None",
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
+      httpOnly: true,
       httpOnly: true,
       secure: true,
       sameSite: "None",
@@ -124,6 +126,7 @@ const resetPasswordHandler = async (req, res) => {
   }
 };
 const fetchUserHandler = async (req, res) => {
+ 
   try {
     res.status(200).send({ userProfile: req.user || null });
   } catch (err) {

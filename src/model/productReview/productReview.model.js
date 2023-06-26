@@ -28,7 +28,21 @@ const getReviews = async (id) => {
   }
 };
 
+const deleteReview = async(id) =>{
+    
+  try{
+      
+    const data = await ReviewDb.findByIdAndDelete({_id:id});
+
+    return data
+  }catch(err){
+      throw err
+  }
+}
+
 module.exports = {
   postReview,
   getReviews,
+  deleteReview
+  
 };
