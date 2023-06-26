@@ -54,7 +54,7 @@ const httpAddProduct = async (req, res) => {
   }
 };
 
-const httpdeleteProduct = async (req, res) => {
+const httpDeleteProduct = async (req, res) => {
   const Productid = req.params.id;
 
   const result = await deleteProduct(Productid);
@@ -103,7 +103,7 @@ module.exports = {
   httpGetProductDetails,
   httpGetAllProducts,
   httpAddProduct,
-  httpdeleteProduct,
+  httpDeleteProduct,
   httpUpdateProduct,
   httpGetFilteredProducts,
 };

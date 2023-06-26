@@ -1,7 +1,5 @@
 const express = require("express");
-const auth = require("../../auth");
-const multer = require("multer");
-const path = require("path");
+const { adminAuth } = require("../../auth");
 const {
   addCategoryHandler,
   fetchCategoriesHandler,
@@ -10,38 +8,52 @@ const {
   updateCategoryHandler,
   httpGetCategoryByName,
 } = require("./categoryHandler");
+const roleTypes = require("../../utils/roleTypes");
 const categoryRouter = express.Router();
 
-function allowUnauthenticated(req, res, next) {
-  const { origin } = req.headers;
-  if (
-    origin === "https://shopzee.onrender.com"
-    // origin === "http://192.168.0.108:5000" ||
-    // origin === "http://localhost:3000"
-  ) {
-    return next();
-  } else {
-    auth(req, res, next);
-  }
+function allowUnauthenticated(role) {
+  return (req, res, next) => {
+    const { origin } = req.headers;
+    if (
+      origin === "https://shopzee.onrender.com" ||
+      origin === "http://localhost:5000"
+    ) {
+      return next();
+    } else {
+      adminAuth(role)(req, res, next);
+    }
+  };
 }
 
 categoryRouter.get(
   "/fetchCategory/:id",
-  allowUnauthenticated,
+  allowUnauthenticated(roleTypes.FETCH_CATEGORY),
   fetchCategoryHandler
 );
 categoryRouter.get(
   "/fetchCategories",
-  allowUnauthenticated,
+  allowUnauthenticated(roleTypes.FETCH_CATEGORIES),
   fetchCategoriesHandler
 );
 categoryRouter.get(
   "/getCategoryByName/:name",
-  allowUnauthenticated,
+  allowUnauthenticated(roleTypes.FETCH_CATEGORY_BY_NAME),
   httpGetCategoryByName
 );
-categoryRouter.post("/addCategory", auth, addCategoryHandler);
-categoryRouter.delete("/deleteCategory/:id", auth, deleteCategoryHandler);
-categoryRouter.patch("/updatecategory/:id", updateCategoryHandler);
+categoryRouter.post(
+  "/addCategory",
+  adminAuth(roleTypes.ADD_CATEGORY),
+  addCategoryHandler
+);
+categoryRouter.delete(
+  "/deleteCategory/:id",
+  adminAuth(roleTypes.DELETE_CATEGORY),
+  deleteCategoryHandler
+);
+categoryRouter.patch(
+  "/updatecategory/:id",
+  adminAuth(roleTypes.UPDATE_CATEGORY_BY_ID),
+  updateCategoryHandler
+);
 
 module.exports = categoryRouter;

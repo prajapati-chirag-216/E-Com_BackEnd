@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("./model/user/userSchema");
 const status = require("http-status");
+
 const auth = async (req, res, next) => {
   try {
     const accessToken = req.cookies["accessToken"];
@@ -11,12 +12,12 @@ const auth = async (req, res, next) => {
       if (accessToken) {
         accessTokenDecoded = jwt.verify(
           accessToken,
-          "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+          process.env.USER_ACCESS_TOKEN_SECRET
         );
       }
       const refreshTokenDecoded = jwt.verify(
         refreshToken,
-        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
+        process.env.USER_REFRESH_TOKEN_SECRET
       );
       if (
         accessTokenDecoded &&
@@ -59,12 +60,12 @@ const verifyUser = async (req, res, next) => {
       if (accessToken) {
         accessTokenDecoded = jwt.verify(
           accessToken,
-          "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
+          process.env.USER_ACCESS_TOKEN_SECRET
         );
       }
       const refreshTokenDecoded = jwt.verify(
         refreshToken,
-        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
+        process.env.USER_REFRESH_TOKEN_SECRET
       );
       if (
         accessTokenDecoded &&
@@ -99,7 +100,7 @@ const verifyRefreshToken = async (req, res, next) => {
     if (refreshToken) {
       const refreshTokenDecoded = jwt.verify(
         refreshToken,
-        "103f6d1f71a29021e0c1b42ec1d9a79ba961ce6d1b8408Fj5rD7Gh9Lm2kP6af8"
+        process.env.USER_REFRESH_TOKEN_SECRET
       );
       if (refreshTokenDecoded) {
         data = await User.findOne({
