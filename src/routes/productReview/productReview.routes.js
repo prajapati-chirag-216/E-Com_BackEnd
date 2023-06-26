@@ -9,7 +9,7 @@ const {
 
 const productReviewRouter = express.Router();
 
-productReviewRouter.post("/productreview/:id", auth, httpPostReview);
+productReviewRouter.post("/productreview/:id",auth, httpPostReview);
 productReviewRouter.get("/getproductReviews/:id", httpGetProductReviews);
 productReviewRouter.delete('/deletereview/:id',httpDeleteReview)
 

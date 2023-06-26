@@ -23,7 +23,7 @@ const app = express();
 
 app.use(
   cors({
-    origin:["https://shopzee.onrender.com",'http://localhost:3000'],
+    origin:["https://shopzee.onrender.com",'http://localhost:3000','http://localhost:5000'],
     credentials: true,
   })
 );

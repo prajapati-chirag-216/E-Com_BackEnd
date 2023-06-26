@@ -26,7 +26,8 @@ const getOrder = async (id) => {
     let response = await OrderDb.findById(id).populate(
       "orderedItems.productId"
     );
-    return { data: response, success: true };
+    console.log(response)
+     return [response]
   } catch (err) {
     throw err;
   }
@@ -121,31 +122,16 @@ const getTodaysOrders = async () => {
         $gte: startOfDay,
         $lt: endOfDay,
       },
-    });
-
-    response = await Promise.all(
-      response.map(async (order) => {
-        let orderedItems = order.orderedItems;
-
-        const products = await Promise.all(
-          orderedItems.map(async (item) => {
-            let product = await getProductById(item.productId);
-
-            return { ...product._doc, quntity: item.quntity };
-          })
-        );
-
-        return {
-          ...order._doc,
-          orderedItems: products,
-        };
-      })
+    }).populate(
+      "orderedItems.productId"
     );
+console.log(response)
+    return response
   } catch (err) {
     throw err;
   }
 
-  return response;
+
 };
 
 const getUsersOrders = async (id) => {
