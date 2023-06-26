@@ -46,7 +46,7 @@ const loginUserHandler = async (req, res) => {
     const { accessToken, refreshToken } = await data.getAuthToken();
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
-      // httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "None",
 
@@ -54,7 +54,7 @@ const loginUserHandler = async (req, res) => {
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
-      // httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "None",
       
@@ -135,7 +135,7 @@ const resetPasswordHandler = async (req, res) => {
   }
 };
 const fetchUserHandler = async (req, res) => {
-  console.log("fetcing");
+ 
   try {
     res.status(200).send({ userProfile: req.user || null });
   } catch (err) {

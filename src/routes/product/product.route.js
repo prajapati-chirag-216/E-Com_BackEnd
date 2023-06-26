@@ -11,6 +11,7 @@ const {
   httpPostReview,
   httpGetProductReviews,
   httpGetFilteredProducts,
+  httpDeleteReview
 } = require("../../routes/product/product.controller");
 
 const productRouter = express.Router();
@@ -22,6 +23,7 @@ productRouter.post("/addproduct", httpAddProduct);
 productRouter.delete("/deleteproduct/:id", httpdeleteProduct);
 productRouter.patch("/updateproduct/:id", httpUpdateProduct);
 productRouter.post("/productreview/:id", httpPostReview);
+productRouter.delete('/deletereview/:id',httpDeleteReview)
 productRouter.get("/getproductReviews/:id", httpGetProductReviews);
 productRouter.get("/getfilteredproducts/:id/:name", httpGetFilteredProducts);
 

@@ -21,10 +21,11 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({ 
-    origin: ["https://shopzee.onrender.com", "http://localhost:5000"],
+    origin: ["https://shopzee.onrender.com"],
     credentials: true,
 }));
 
+// "http://localhost:3000", "http://localhost:5000",'http://192.168.43.125:5000','http://192.168.43.226:5000
 // {
 // origin: true,
 // // origin: ["http://localhost:3000", "http://localhost:5000"],
@@ -33,7 +34,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -49,8 +49,6 @@ app.use(orderRouter);
 app.use(contactUsRouter);
 
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 
 module.exports = app;
