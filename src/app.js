@@ -8,8 +8,9 @@ const adminAuthrouter = require("./routes/adminAuth/adminRoutes");
 const displayImgrouter = require("./routes/displayImg/displayRoutes");
 const categoryRouter = require("./routes/categories/categoryRoutes");
 const userRouter = require("./routes/user/userRoutes");
-const orderRouter = require("./routes/Order/order.routes");
+const orderRouter = require("./routes/order/order.routes");
 const contactUsRouter = require("./routes/ContactUs/Contactus.route");
+const productReviewRouter = require("./routes/productReview/productReview.routes");
 const app = express();
 
 app.use((req, res, next) => {
@@ -20,25 +21,18 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({ 
-    origin: ["https://shopzee.onrender.com"],
+app.use(
+  cors({
+    origin: "https://shopzee.onrender.com",
     credentials: true,
-}));
-
-// "http://localhost:3000", "http://localhost:5000",'http://192.168.43.125:5000','http://192.168.43.226:5000
-// {
-// origin: true,
-// // origin: ["http://localhost:3000", "http://localhost:5000"],
-// credentials: true,
-// }
+  })
+);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-
 
 app.use(productRouter);
 app.use(adminAuthrouter);
@@ -47,6 +41,7 @@ app.use(categoryRouter);
 app.use(userRouter);
 app.use(orderRouter);
 app.use(contactUsRouter);
+app.use(productReviewRouter);
 
 
 

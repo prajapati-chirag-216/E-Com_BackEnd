@@ -16,7 +16,6 @@ const addCategoryHandler = async (req, res) => {
 const fetchCategoriesHandler = async (req, res) => {
   try {
     const data = await Category.find();
-    console.log("data");
     res.status(200).send(data);
   } catch (err) {
     res.status(err.status || 404).send(err || "somthing went Wrong!");
@@ -64,7 +63,6 @@ const deleteCategoryHandler = async (req, res) => {
 
 const httpGetCategoryByName = async (req, res) => {
   const catagoryName = req.params.name;
-  console.log(catagoryName);
 
   try {
     const data = await Category.findOne({ name: catagoryName }).select({

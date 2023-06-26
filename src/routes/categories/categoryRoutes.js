@@ -14,14 +14,14 @@ const categoryRouter = express.Router();
 
 function allowUnauthenticated(req, res, next) {
   const { origin } = req.headers;
-  console.log(origin);
-  if (origin === "https://shopzee.onrender.com") {
-    // if (origin === "http://localhost:5000") {
+  if (
+    origin === "https://shopzee.onrender.com"
+    // origin === "http://192.168.0.108:5000" ||
+    // origin === "http://localhost:3000"
+  ) {
       // if(origin === 'http:// 192.168.43.226:5000' || origin === "http://localhost:5000" ){
-    
     return next();
   } else {
-   
     auth(req, res, next);
   }
 }

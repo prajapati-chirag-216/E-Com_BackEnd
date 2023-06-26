@@ -100,44 +100,10 @@ const updateProduct = async (productData, productId) => {
   return res;
 };
 
-const postReview = async (productId, reviewData) => {
-  const reviewObj = {
-    productId,
-    ...reviewData,
-  };
-  try {
-    const data = new ReviewDb(reviewObj);
-    await data.save();
-    return data;
-  } catch (err) {
-    throw err;
-  }
-};
 
-const getReviews = async (id) => {
-  try {
-    const data = await ReviewDb.find({ productId: id }).select({
-      __v: 0,
-      productId: 0,
-    });
 
-    return data;
-  } catch (err) {
-    throw err;
-  }
-};
 
-const deleteReview = async(id) =>{
-    
-   try{
-       
-     const data = await ReviewDb.findByIdAndDelete({_id:id});
 
-     return data
-   }catch(err){
-       throw err
-   }
-}
 
 module.exports = {
   getProducts,
@@ -145,9 +111,7 @@ module.exports = {
   addProduct,
   deleteProduct,
   updateProduct,
-  postReview,
-  getReviews,
   getFilteredProducts,
   getProductById,
-  deleteReview
+ 
 };

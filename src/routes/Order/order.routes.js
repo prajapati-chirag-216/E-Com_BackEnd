@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   httpPostOrder,
+  httpGetOrder,
   httpGetAllOrders,
   httpOrderStatus,
   httpGetUserOrders,
@@ -15,6 +16,7 @@ orderRouter.post("/postOrder", auth, httpPostOrder);
 orderRouter.get("/getAllOrders", httpGetAllOrders);
 orderRouter.patch("/updateOrderStatus/:id", httpOrderStatus);
 orderRouter.get("/getUserOrders", auth, httpGetUserOrders);
+orderRouter.get("/getOrder/:id", auth, httpGetOrder);
 orderRouter.get("/getTodayOrders", httpsGetTodaysOrders);
 
 module.exports = orderRouter;

@@ -50,7 +50,6 @@ const auth = async (req, res, next) => {
   }
 };
 const verifyUser = async (req, res, next) => {
-  console.log("varify");
   try {
     const accessToken = req.cookies["accessToken"];
     const refreshToken = req.cookies["refreshToken"];
@@ -121,23 +120,4 @@ const verifyRefreshToken = async (req, res, next) => {
     res.status(err.status || 404).send(err.message || "Somthing Went Wrong!");
   }
 };
-// const verifyUser = async (req, res, next) => {
-//   try {
-//     const accessToken = req.cookies["accessToken"];
-//     let data;
-//     if (accessToken) {
-//       const decoded = jwt.verify(
-//         accessToken,
-//         "7ab7e381146f2904109d01a6862e3ab42afdd4bcf9ba976168bae6dc2c5ec610"
-//       );
-//       data = await User.findOne({
-//         _id: decoded._id,
-//       }).select({ name: 1 });
-//     }
-//     req.user = data;
-//     next();
-//   } catch (err) {
-//     res.status(404).send({ message: "somthing went wrong" });
-//   }
-// };
 module.exports = { auth, verifyUser, verifyRefreshToken };

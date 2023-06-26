@@ -1,9 +1,8 @@
-const express = require('express')
-const {httpPostMyMeassageHandler} = require('../ContactUs/contactUsControler')
+const express = require("express");
+const { httpPostMyMeassageHandler } = require("./contactUsControler");
 
-const contactUsRouter = express.Router()
+const contactUsRouter = express.Router();
 
-contactUsRouter.post('/postMymeassage',httpPostMyMeassageHandler)
+contactUsRouter.post("/postMymeassage", httpPostMyMeassageHandler);
 
-
-module.exports = contactUsRouter
+module.exports = contactUsRouter;

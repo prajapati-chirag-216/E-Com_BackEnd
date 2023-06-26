@@ -1,23 +1,15 @@
-const MessageDb = require('../ContactUs/contactUs.mongo')
+const MessageDb = require("../ContactUs/contactUs.mongo");
 
+const postUserMessage = async (message) => {
+  try {
+    const data = new MessageDb(message);
 
+    await data.save();
 
-const postUserMessage = async(message) =>{
-  
-    try{
-        
-        const data = new MessageDb(message);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 
-         await data.save();
-
-         return data;
-         
-    }catch(err){
-
-         throw err
-    }
-     
-       
-}
-
-module.exports = {postUserMessage}
+module.exports = { postUserMessage };

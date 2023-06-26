@@ -1,26 +1,35 @@
 const OrderDb = require("../Order/order.mongo");
-const User = require('../user/userSchema')
+const User = require("../user/userSchema");
 const { getProductById } = require("../product/product.model");
 
-
-const postOrder = async (userData,userId) => {
+const postOrder = async (userData, userId) => {
   let result;
-
-
 
   try {
     const data = new OrderDb(userData);
     result = await data.save();
- 
-     const response = await User.findByIdAndUpdate({_id:userId},{cartItems:[]},{new:true})
 
-     console.log(response)
-     
+    const response = await User.findByIdAndUpdate(
+      { _id: userId },
+      { cartItems: [] },
+      { new: true }
+    );
   } catch (err) {
     throw err;
   }
 
   return result;
+};
+
+const getOrder = async (id) => {
+  try {
+    let response = await OrderDb.findById(id).populate(
+      "orderedItems.productId"
+    );
+    return { data: response, success: true };
+  } catch (err) {
+    throw err;
+  }
 };
 
 const getAllOrders = async () => {
@@ -40,7 +49,6 @@ const getAllOrders = async () => {
             return { ...product._doc, quntity: item.quntity };
           })
         );
-
         return {
           ...order._doc,
           orderedItems: products,
@@ -66,18 +74,6 @@ const updateOrderStatus = async (status, OrderId) => {
   }
 
   return response;
-};
-
-const getOrderById = async (orderId) => {
-  let response;
-
-  try {
-    response = await OrderDb.findById({ _id: orderId });
-  } catch (err) {
-    throw err;
-  }
-
-  return response ? [response] : [];
 };
 
 const deleteOrder = async (orderId) => {
@@ -154,9 +150,9 @@ const getUsersOrders = async (id) => {
 
 module.exports = {
   postOrder,
+  getOrder,
   getAllOrders,
   updateOrderStatus,
-  getOrderById,
   deleteOrder,
   getTodaysOrders,
   getUsersOrders,

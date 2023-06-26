@@ -25,7 +25,6 @@ const signupUserHandler = async (req, res) => {
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-    console.log(data.email);
     // sendWelcomeEmail(data.email);
     res.status(200).send({ success: true });
   } catch (err) {
@@ -38,7 +37,6 @@ const signupUserHandler = async (req, res) => {
 };
 const loginUserHandler = async (req, res) => {
   try {
-    // console.log("ran");
     const data = await User.findbyCredentials(
       req.body.email,
       req.body.password
@@ -47,22 +45,19 @@ const loginUserHandler = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "None",
-
-
     };
     const refreshTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "None",
-      
-
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-    console.log(data.email);
     // sendWelcomeEmail(data.email);
     res.status(200).send({
       success: true,
@@ -75,10 +70,8 @@ const loginUserHandler = async (req, res) => {
 
 const logoutUserHandler = (req, res) => {
   try {
-    res.clearCookie("refreshToken",{ secure: true,
-      sameSite: "None"});
-    res.clearCookie("accessToken",{ secure: true,
-      sameSite: "None"});
+    res.clearCookie("refreshToken", { secure: true, sameSite: "None" });
+    res.clearCookie("accessToken", { secure: true, sameSite: "None" });
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(err.status || status.BAD_REQUEST).send(err);
@@ -102,13 +95,11 @@ const forgotPasswordHandler = async (req, res) => {
     // );
     res.status(200).send({ success: true, resettoken });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
 const resetPasswordHandler = async (req, res) => {
-  console.log(req.params.id);
-
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.id)
@@ -131,7 +122,7 @@ const resetPasswordHandler = async (req, res) => {
 
     return res.status(200).send({ status: true });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const fetchUserHandler = async (req, res) => {
@@ -139,7 +130,7 @@ const fetchUserHandler = async (req, res) => {
   try {
     res.status(200).send({ userProfile: req.user || null });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const addCartItemsHandler = async (req, res) => {
@@ -163,14 +154,13 @@ const addCartItemsHandler = async (req, res) => {
     await data.save();
     await res.status(200).send({ success: true, cartItems });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
 const getAllUsers = async (req, res) => {
   try {
     const result = await User.find();
-
     return res.status(200).json(result);
   } catch (err) {
     throw err;
@@ -183,13 +173,15 @@ const getAccessToken = async (req, res) => {
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       httpOnly: true,
+      sameSite: "None",
+      secure: true,
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.status(200).send({
       success: true,
     });
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 
@@ -203,7 +195,7 @@ const httpUpdateUserInformation = async (req, res) => {
     });
     return res.status(200).json(response);
   } catch (err) {
-    res.status(err.status || status[400]).send(err);
+    res.status(err.status || status.BAD_REQUEST).send(err);
   }
 };
 const httpUpdatePassword = async (req, res) => {
