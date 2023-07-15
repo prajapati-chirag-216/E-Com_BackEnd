@@ -29,6 +29,6 @@ productReviewRouter.get(
   allowUnauthenticated(roleTypes.FETCH_REVIEWS),
   httpGetProductReviews
 );
-productReviewRouter.delete("/deletereview/:id", httpDeleteReview);
+productReviewRouter.delete("/deletereview/:id",adminAuth(roleTypes), httpDeleteReview);
 
 module.exports = productReviewRouter;

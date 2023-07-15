@@ -38,6 +38,7 @@ const roles = {
     "UPDATE_PRODUCT",
     "FETCH_REVIEWS",
     "ADD_REVIEWS",
+    'DELETE_REVIEW',
     "FETCH_USERS",
   ],
 };
