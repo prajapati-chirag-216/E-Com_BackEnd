@@ -77,6 +77,7 @@ userSchema.methods.createResetToken = function () {
 
 userSchema.methods.getAuthToken = function () {
   const user = this;
+  console.log( process.env.USER_ACCESS_TOKEN_SECRET)
   console.log(this,'oi')
   const accessToken = jwt.sign(
     { _id: user._id.toString() },
@@ -86,7 +87,6 @@ userSchema.methods.getAuthToken = function () {
     }
   );
   console.log(accessToken,'acce')
-  console.log( process.env.USER_ACCESS_TOKEN_SECRET)
   const refreshToken = jwt.sign(
     { _id: user._id.toString() },
     process.env.USER_REFRESH_TOKEN_SECRET,
