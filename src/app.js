@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
   const allowOrigins = [
   
-   ' https://shopzee.onrender.com',
+   'https://shopzee.onrender.com',
    'https://sz-adminpanel.onrender.com',
    'http://localhost:3000',
    'http://localhost:5000'
