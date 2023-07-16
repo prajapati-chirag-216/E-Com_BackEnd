@@ -14,18 +14,12 @@ function allowUnauthenticated(role) {
     const { origin } = req.headers;
     if (
       origin === "https://shopzee.onrender.com" ||
-      origin === "http://localhost:5000"
+      origin === "http://localhost:5000" 
     ) {
-      if(role === "FETCH_DISPLAY"){
-
-        console.log('here');
-      }
+     
       return next();
     } else {
-      if(role === 'FETCH_DISPLAY'){
-
-        console.log('haha');
-      }
+      
       adminAuth(role)(req, res, next);
     }
   };

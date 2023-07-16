@@ -16,8 +16,14 @@ const ProductInfoSchema = new mongoose.Schema(
     },
     image: [
       {
-        type: String,
-        require: true,
+        imageLink: {
+          type: String,
+          required: true
+        },
+        blurhash: {
+          type: String,
+          required: true
+        }
       },
     ],
     status: {

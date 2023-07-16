@@ -13,6 +13,10 @@ const categorySchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    blurhash: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

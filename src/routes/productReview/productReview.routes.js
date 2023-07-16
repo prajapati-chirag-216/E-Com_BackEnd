@@ -13,7 +13,7 @@ function allowUnauthenticated(role) {
     const { origin } = req.headers;
     if (
       origin === "https://shopzee.onrender.com" ||
-      origin === "http://localhost:5000"
+      origin === "http://localhost:5000"   
     ) {
       return next();
     } else {

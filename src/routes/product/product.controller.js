@@ -9,6 +9,7 @@ const {
   getFilteredProducts,
   deleteReview
 } = require("../../model/product/product.model");
+const generateBlurHash = require('../displayImg/displayHandler') 
 
 const httpGetProduct = async (req, res) => {
   const id = (req.params && req.params.id) || undefined;
@@ -43,6 +44,27 @@ const httpGetAllProducts = async (req, res) => {
 
 const httpAddProduct = async (req, res) => {
   const product = req.body;
+
+
+  const newImageData = product.image.map((imageLink)=>{
+
+      const blurhash = generateBlurHash(imageLink);
+
+
+      return(
+        {
+          ...imageLink,
+          blurhash:blurhash
+        }
+      )
+
+       
+})
+
+product = {
+   ...product,
+   image:newImageData
+}
 
   const result = await addProduct(product);
 

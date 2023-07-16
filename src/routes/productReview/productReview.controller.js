@@ -6,7 +6,7 @@ deleteReview
 
 const httpPostReview = async (req, res) => {
   const userId = req.user._id;
-  console.log(userId)
+
   const productId = req.params.id;
   const reviewData = req.body;
   const result = await postReview(userId, productId, reviewData);
