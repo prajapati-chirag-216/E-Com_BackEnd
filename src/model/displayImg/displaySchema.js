@@ -5,6 +5,10 @@ const displaySchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  blurhash:{
+    type:String,
+    required:true
+  },
   categoryName:{
     type:String,
     required:true

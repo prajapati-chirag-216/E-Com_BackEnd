@@ -13,8 +13,24 @@ const contactUsRouter = require("./routes/ContactUs/Contactus.route");
 const productReviewRouter = require("./routes/productReview/productReview.routes");
 const app = express();
 
+
+
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://shopzee.onrender.com");
+
+  const allowOrigins = [
+  
+   'https://shopzee.onrender.com',
+   'https://sz-adminpanel.onrender.com',
+   'http://localhost:3000',
+   'http://localhost:5000'
+  
+  ]
+  const origin = req.headers.origin;
+
+     if(allowOrigins.includes(origin)){
+       res.setHeader("Access-Control-Allow-Origin", origin);
+     }
+
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -23,11 +39,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: [
-      "https://shopzee.onrender.com",
-      "http://localhost:3000",
-      "http://localhost:5000",
-    ],
+    origin:["https://shopzee.onrender.com",'http://localhost:3000','http://localhost:5000','https://sz-adminpanel.onrender.com'],
     credentials: true,
   })
 );

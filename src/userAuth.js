@@ -3,9 +3,11 @@ const User = require("./model/user/userSchema");
 const status = require("http-status");
 
 const auth = async (req, res, next) => {
+
   try {
     const accessToken = req.cookies["accessToken"];
     const refreshToken = req.cookies["refreshToken"];
+  
     let data;
     if (refreshToken) {
       let accessTokenDecoded;

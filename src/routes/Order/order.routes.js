@@ -46,7 +46,7 @@ orderRouter.get(
   httpGetOrder
 );
 orderRouter.get(
-  "/getTodayOrders",
+  "/getTodaysOrders",
   adminAuth(roleTypes.FETCH_TODAYS_ORDERS),
   httpsGetTodaysOrders
 );

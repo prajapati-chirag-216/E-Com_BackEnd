@@ -13,7 +13,7 @@ function allowUnauthenticated(role) {
     const { origin } = req.headers;
     if (
       origin === "https://shopzee.onrender.com" ||
-      origin === "http://localhost:5000"
+      origin === "http://localhost:5000"   
     ) {
       return next();
     } else {
@@ -28,6 +28,6 @@ productReviewRouter.get(
   allowUnauthenticated(roleTypes.FETCH_REVIEWS),
   httpGetProductReviews
 );
-productReviewRouter.delete("/deletereview/:id", httpDeleteReview);
+productReviewRouter.delete("/deletereview/:id",adminAuth(roleTypes), httpDeleteReview);
 
 module.exports = productReviewRouter;

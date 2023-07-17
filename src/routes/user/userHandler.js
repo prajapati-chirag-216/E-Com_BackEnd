@@ -41,7 +41,9 @@ const loginUserHandler = async (req, res) => {
       req.body.email,
       req.body.password
     );
+    console.log(data,'data')
     const { accessToken, refreshToken } = await data.getAuthToken();
+    console.log(accessToken,refreshToken,'tokesns')
     const accessTokenCookieOptions = {
       expires: new Date(Date.now() + 1000 * 60 * 5),
       httpOnly: true,
@@ -58,12 +60,14 @@ const loginUserHandler = async (req, res) => {
     };
     res.cookie("accessToken", accessToken, accessTokenCookieOptions);
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+    console.log('hii')
     // sendWelcomeEmail(data.email);
     res.status(200).send({
       success: true,
       cartItems: data.cartItems,
     });
   } catch (err) {
+     console.log(err,'noi')
     res.status(err.status || 400).send(err.message || "somthing went Wrong");
   }
 };
