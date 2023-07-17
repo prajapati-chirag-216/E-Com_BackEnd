@@ -22,7 +22,6 @@ function allowUnauthenticated(role) {
   };
 }
 const productReviewRouter = express.Router();
-
 productReviewRouter.post("/productreview/:id", auth, httpPostReview);
 productReviewRouter.get(
   "/getproductReviews/:id",
